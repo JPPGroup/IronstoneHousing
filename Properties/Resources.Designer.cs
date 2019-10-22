@@ -71,6 +71,15 @@ namespace Jpp.Ironstone.Housing.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a invert (mm).
+        /// </summary>
+        internal static string Command_Prompt_EnterInvert {
+            get {
+                return ResourceManager.GetString("Command_Prompt_EnterInvert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 
         ///Enter a level.
         /// </summary>
@@ -160,18 +169,27 @@ namespace Jpp.Ironstone.Housing.Properties {
         /// <summary>
         ///   Looks up a localized string similar to From Block At Gradient.
         /// </summary>
-        internal static string ExtensionApplication_UI_BtnLevelBlockFromBlock {
+        internal static string ExtensionApplication_UI_BtnLevelBlockFromBlockAtGradient {
             get {
-                return ResourceManager.GetString("ExtensionApplication_UI_BtnLevelBlockFromBlock", resourceCulture);
+                return ResourceManager.GetString("ExtensionApplication_UI_BtnLevelBlockFromBlockAtGradient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to From Block With Invert.
+        /// </summary>
+        internal static string ExtensionApplication_UI_BtnLevelBlockFromBlockWithInvert {
+            get {
+                return ResourceManager.GetString("ExtensionApplication_UI_BtnLevelBlockFromBlockWithInvert", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to From Point At Gradient.
         /// </summary>
-        internal static string ExtensionApplication_UI_BtnLevelBlockFromPoint {
+        internal static string ExtensionApplication_UI_BtnLevelBlockFromPointAtGradient {
             get {
-                return ResourceManager.GetString("ExtensionApplication_UI_BtnLevelBlockFromPoint", resourceCulture);
+                return ResourceManager.GetString("ExtensionApplication_UI_BtnLevelBlockFromPointAtGradient", resourceCulture);
             }
         }
         

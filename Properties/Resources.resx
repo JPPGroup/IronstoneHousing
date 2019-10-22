@@ -119,7 +119,11 @@
   </resheader>
   <data name="Command_Prompt_EnterGradient" xml:space="preserve">
     <value>
-Enter a gradient (1 in) </value>
+Enter a gradient (1 in)</value>
+  </data>
+  <data name="Command_Prompt_EnterInvert" xml:space="preserve">
+    <value>
+Enter a invert (mm)</value>
   </data>
   <data name="Command_Prompt_EnterLevel" xml:space="preserve">
     <value>
@@ -154,10 +158,13 @@ Select start point</value>
   <data name="Exception_NoLevelBlock" xml:space="preserve">
     <value>No level block.</value>
   </data>
-  <data name="ExtensionApplication_UI_BtnLevelBlockFromBlock" xml:space="preserve">
+  <data name="ExtensionApplication_UI_BtnLevelBlockFromBlockAtGradient" xml:space="preserve">
     <value>From Block At Gradient</value>
   </data>
-  <data name="ExtensionApplication_UI_BtnLevelBlockFromPoint" xml:space="preserve">
+  <data name="ExtensionApplication_UI_BtnLevelBlockFromBlockWithInvert" xml:space="preserve">
+    <value>From Block With Invert</value>
+  </data>
+  <data name="ExtensionApplication_UI_BtnLevelBlockFromPointAtGradient" xml:space="preserve">
     <value>From Point At Gradient</value>
   </data>
   <data name="ExtensionApplication_UI_BtnLevelBlocks" xml:space="preserve">
