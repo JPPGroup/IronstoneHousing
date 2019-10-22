@@ -5,7 +5,6 @@ using Jpp.Ironstone.Housing;
 using Unity;
 
 [assembly: ExtensionApplication(typeof(HousingExtensionApplication))]
-
 namespace Jpp.Ironstone.Housing
 {
     public class HousingExtensionApplication : IIronstoneExtensionApplication
