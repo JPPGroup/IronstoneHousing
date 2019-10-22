@@ -14,9 +14,13 @@ namespace Jpp.Ironstone.Housing.Commands
     /// </summary>
     public static class LevelBlockCommands
     {
+        private static readonly string[] GradientKeywords = { "No", "Yes" };
+
         private static double _level; //cache of previous level
         private static double _gradient; //cache of previous gradient
         private static double _invert; //cache of previous invert
+        private static string _includeGradient = GradientKeywords[0]; //cache of previous gradient selection
+        
 
         /// <summary>
         /// Custom command to calculate a level from a given point at gradient
@@ -73,14 +77,14 @@ namespace Jpp.Ironstone.Housing.Commands
             var startObjectId = ed.PromptForEntity(Resources.Command_Prompt_SelectStartLevelBlock, typeof(BlockReference), Resources.Command_Prompt_RejectBlockReference, true);
             if (!startObjectId.HasValue) return;
 
-            var block = (BlockReference)trans.GetObject(startObjectId.Value, OpenMode.ForRead);
+            var startBlock = (BlockReference)trans.GetObject(startObjectId.Value, OpenMode.ForRead);
 
-            if (!LevelBlockHelper.IsLevelBlockReference(block)) return;
+            if (!LevelBlockHelper.IsLevelBlockReference(startBlock)) return;
 
-            var startLevel = LevelBlockHelper.GetLevelFromBlock(block);
+            var startLevel = LevelBlockHelper.GetLevelFromBlock(startBlock);
             if (!startLevel.HasValue) return;
 
-            var startPoint = block.Position;
+            var startPoint = startBlock.Position;
 
             var gradient = ed.PromptForDouble(Resources.Command_Prompt_EnterGradient, _gradient);
             if (!gradient.HasValue) return;
@@ -88,7 +92,9 @@ namespace Jpp.Ironstone.Housing.Commands
             var endPoint = ed.PromptForPosition(Resources.Command_Prompt_SelectEndPoint);
             if (!endPoint.HasValue) return;
 
-            GenerateBlock(startPoint, endPoint.Value, startLevel.Value, gradient.Value, db);
+            var endBlock = GenerateBlock(startPoint, endPoint.Value, startLevel.Value, gradient.Value, db);
+
+            if (IncludeGradient()) GradientBlockCommands.GenerateGradientBlock(db, startBlock, endBlock);
 
             _gradient = gradient.Value;
 
@@ -114,11 +120,11 @@ namespace Jpp.Ironstone.Housing.Commands
             var startObjectId = ed.PromptForEntity(Resources.Command_Prompt_SelectStartLevelBlock, typeof(BlockReference), Resources.Command_Prompt_RejectBlockReference, true);
             if (!startObjectId.HasValue) return;
 
-            var block = (BlockReference)trans.GetObject(startObjectId.Value, OpenMode.ForRead);
+            var startBlock = (BlockReference)trans.GetObject(startObjectId.Value, OpenMode.ForRead);
 
-            if (!LevelBlockHelper.IsLevelBlockReference(block)) return;
+            if (!LevelBlockHelper.IsLevelBlockReference(startBlock)) return;
 
-            var startLevel = LevelBlockHelper.GetLevelFromBlock(block);
+            var startLevel = LevelBlockHelper.GetLevelFromBlock(startBlock);
             if (!startLevel.HasValue) return;
 
             var invert = ed.PromptForDouble(Resources.Command_Prompt_EnterInvert, _invert);
@@ -129,7 +135,9 @@ namespace Jpp.Ironstone.Housing.Commands
 
             var endLevel = startLevel.Value - (invert.Value / 1000);
 
-            LevelBlockHelper.NewLevelBlockAtPoint(db, endPoint.Value, endLevel);
+            var endBlock = LevelBlockHelper.NewLevelBlockAtPoint(db, endPoint.Value, endLevel);
+
+            if (IncludeGradient()) GradientBlockCommands.GenerateGradientBlock(db, startBlock, endBlock);
 
             _invert = invert.Value;
 
@@ -137,13 +145,23 @@ namespace Jpp.Ironstone.Housing.Commands
         }
 
 
-        private static void GenerateBlock(Point3d startPoint, Point3d endPoint, double startLevel, double gradient, Database db)
+        private static BlockReference GenerateBlock(Point3d startPoint, Point3d endPoint, double startLevel, double gradient, Database db)
         {
             using (var line = new Line(startPoint, endPoint))
             {
                 var endLevel = startLevel + line.Length * (1 / gradient);
-                LevelBlockHelper.NewLevelBlockAtPoint(db, endPoint, endLevel);
+                return LevelBlockHelper.NewLevelBlockAtPoint(db, endPoint, endLevel);
             }
+        }
+
+        private static bool IncludeGradient()
+        {
+            var ed = Application.DocumentManager.MdiActiveDocument.Editor;
+            var result = ed.PromptForKeywords(Resources.Command_Prompt_IncludeGradientBlock, GradientKeywords, _includeGradient);
+            
+            _includeGradient = result;
+
+            return result == GradientKeywords[1];
         }
     }
 }

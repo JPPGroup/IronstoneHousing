@@ -4,7 +4,7 @@ using System;
 
 namespace Jpp.Ironstone.Housing.Helpers
 {
-    internal class LevelBlockHelper
+    internal static class LevelBlockHelper
     {
         private const string LEVEL_BLOCK_NAME = "ProposedLevel";
         private const string LEVEL_ATTRIBUTE_NAME = "LEVEL";
@@ -53,7 +53,7 @@ namespace Jpp.Ironstone.Housing.Helpers
             return level;
         }
 
-        public static void NewLevelBlockAtPoint(Database database, Point3d point, double level)
+        public static BlockReference NewLevelBlockAtPoint(Database database, Point3d point, double level)
         {
             var trans = database.TransactionManager.TopTransaction;
             var bt = (BlockTable)trans.GetObject(database.BlockTableId, OpenMode.ForRead);
@@ -101,9 +101,11 @@ namespace Jpp.Ironstone.Housing.Helpers
 
                     database.TransactionManager.QueueForGraphicsFlush();
 
-                    return;
+                    return blockRef;
                 }
             }
+
+            return null;
         }
     }
 }

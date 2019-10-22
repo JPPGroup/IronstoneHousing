@@ -97,9 +97,15 @@
     </Reference>
     <Reference Include="IronstoneCore, Version=0.3.0.19, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>packages\Jpp.Ironstone.Core.0.3.0-deve\lib\net472\IronstoneCore.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="IronstoneCoreUI, Version=0.3.0.19, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>packages\Jpp.Ironstone.Core.UI.0.3.0-deve\lib\net472\IronstoneCoreUI.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="IronstoneHousingObjectModel, Version=0.3.0.7, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>packages\Jpp.Ironstone.Housing.ObjectModel.0.3.0-deva\lib\net472\IronstoneHousingObjectModel.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="Microsoft.ApplicationInsights, Version=2.9.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.ApplicationInsights.2.9.1\lib\net46\Microsoft.ApplicationInsights.dll</HintPath>
@@ -146,8 +152,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\GradientBlockCommands.cs" />
     <Compile Include="Commands\LevelBlockCommands.cs" />
     <Compile Include="Commands\LincolnshireCommands.cs" />
+    <Compile Include="Helpers\GradientBlockHelper.cs" />
     <Compile Include="Helpers\LevelBlockHelper.cs" />
     <Compile Include="HousingExtensionApplication.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -175,6 +183,7 @@
     <Content Include="IronstoneConfig.xml" />
     <Content Include="IronstoneConfigBeta.xml" />
     <Content Include="IronstoneConfigRelease.xml" />
+    <None Include="Resources\gradient-large.png" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="AutocadStyleResourceDictionary.xaml">
