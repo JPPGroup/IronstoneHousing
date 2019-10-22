@@ -117,4 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Command_Prompt_EnterGradient" xml:space="preserve">
+    <value>\nEnter a gradient (1 in) : </value>
+  </data>
+  <data name="Command_Prompt_EnterLevel" xml:space="preserve">
+    <value>\nEnter a level :</value>
+  </data>
+  <data name="Command_Prompt_Reject3dPolyline" xml:space="preserve">
+    <value>Only 3d polylines allowed.</value>
+  </data>
+  <data name="Command_Prompt_SelectEndPoint" xml:space="preserve">
+    <value>\nSelect end point :</value>
+  </data>
+  <data name="Command_Prompt_SelectFootwayPoint" xml:space="preserve">
+    <value>\nSelect back of footway point : </value>
+  </data>
+  <data name="Command_Prompt_SelectRoadString" xml:space="preserve">
+    <value>\nSelect road string : </value>
+  </data>
+  <data name="Command_Prompt_SelectStartPoint" xml:space="preserve">
+    <value>\nSelect start point : </value>
+  </data>
 </root>

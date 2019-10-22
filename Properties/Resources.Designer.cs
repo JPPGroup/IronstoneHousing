@@ -59,5 +59,68 @@ namespace Jpp.Ironstone.Housing.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to \nEnter a gradient (1 in) : .
+        /// </summary>
+        internal static string Command_Prompt_EnterGradient {
+            get {
+                return ResourceManager.GetString("Command_Prompt_EnterGradient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to \nEnter a level :.
+        /// </summary>
+        internal static string Command_Prompt_EnterLevel {
+            get {
+                return ResourceManager.GetString("Command_Prompt_EnterLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only 3d polylines allowed..
+        /// </summary>
+        internal static string Command_Prompt_Reject3dPolyline {
+            get {
+                return ResourceManager.GetString("Command_Prompt_Reject3dPolyline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to \nSelect end point :.
+        /// </summary>
+        internal static string Command_Prompt_SelectEndPoint {
+            get {
+                return ResourceManager.GetString("Command_Prompt_SelectEndPoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to \nSelect back of footway point : .
+        /// </summary>
+        internal static string Command_Prompt_SelectFootwayPoint {
+            get {
+                return ResourceManager.GetString("Command_Prompt_SelectFootwayPoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to \nSelect road string : .
+        /// </summary>
+        internal static string Command_Prompt_SelectRoadString {
+            get {
+                return ResourceManager.GetString("Command_Prompt_SelectRoadString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to \nSelect start point : .
+        /// </summary>
+        internal static string Command_Prompt_SelectStartPoint {
+            get {
+                return ResourceManager.GetString("Command_Prompt_SelectStartPoint", resourceCulture);
+            }
+        }
     }
 }

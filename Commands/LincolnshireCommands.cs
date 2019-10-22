@@ -6,6 +6,7 @@ using Autodesk.AutoCAD.Runtime;
 using Jpp.Ironstone.Core.UI.Autocad;
 using Jpp.Ironstone.Housing.Helpers;
 using System;
+using Jpp.Ironstone.Housing.Properties;
 
 namespace Jpp.Ironstone.Housing.Commands
 {
@@ -14,13 +15,10 @@ namespace Jpp.Ironstone.Housing.Commands
     /// </summary>
     public static class LincolnshireCommands
     {
-        private const string PROMPT_SELECT_FOOTWAY_POINT = "\nSelect back of footway point:";
-        private const string PROMPT_SELECT_ROAD_STRING = "\nSelect road string: ";
-
         /// <summary>
         /// Custom command for Lincolnshire to add 0.177mm to carriageway level for back of footway
         /// </summary>
-        [CommandMethod("C_P_BOF_LEVEL_177")]
+        [CommandMethod("C_Lincolnshire_BackOfFootwayLevel_177")]
         public static void AddBackOfFootwayLevel177()
         {
             HousingExtensionApplication.Current.Logger.LogCommand(typeof(LincolnshireCommands), nameof(AddBackOfFootwayLevel177));
@@ -30,7 +28,7 @@ namespace Jpp.Ironstone.Housing.Commands
         /// <summary>
         /// Custom command for Lincolnshire to add 0.105mm to carriageway level for back of footway
         /// </summary>
-        [CommandMethod("C_P_BOF_LEVEL_LEVEL_105")]
+        [CommandMethod("C_Lincolnshire_BackOfFootwayLevel_105")]
         public static void AddBackOfFootwayLevel105()
         {
             HousingExtensionApplication.Current.Logger.LogCommand(typeof(LincolnshireCommands), nameof(AddBackOfFootwayLevel105));
@@ -49,7 +47,7 @@ namespace Jpp.Ironstone.Housing.Commands
             using var plane = new Plane(Point3d.Origin, Vector3d.ZAxis);
             var vectorNormal = plane.Normal;
 
-            var point = ed.PromptForPosition(PROMPT_SELECT_FOOTWAY_POINT);
+            var point = ed.PromptForPosition(Resources.Command_Prompt_SelectFootwayPoint);
 
             while (point.HasValue)
             {
@@ -59,14 +57,13 @@ namespace Jpp.Ironstone.Housing.Commands
 
                 LevelBlockHelper.NewLevelBlockAtPoint(db, point.Value, footwayLevel);
 
-                point = ed.PromptForPosition(PROMPT_SELECT_FOOTWAY_POINT);
+                point = ed.PromptForPosition(Resources.Command_Prompt_SelectFootwayPoint);
             }
         }
 
         private static Polyline3d SelectRoadString(Database database, Editor editor)
         {
-            var objectId = editor.PromptForEntity(PROMPT_SELECT_ROAD_STRING, typeof(Polyline3d),"Only 3d polylines allowed.", true);
-
+            var objectId = editor.PromptForEntity(Resources.Command_Prompt_SelectRoadString, typeof(Polyline3d),Resources.Command_Prompt_Reject3dPolyline, true);
             if (!objectId.HasValue) return null;
 
             using var trans = database.TransactionManager.StartTransaction();
