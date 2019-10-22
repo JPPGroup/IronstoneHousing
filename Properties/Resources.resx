@@ -118,24 +118,59 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Command_Prompt_EnterGradient" xml:space="preserve">
-    <value>\nEnter a gradient (1 in) : </value>
+    <value>
+Enter a gradient (1 in) </value>
   </data>
   <data name="Command_Prompt_EnterLevel" xml:space="preserve">
-    <value>\nEnter a level :</value>
+    <value>
+Enter a level</value>
   </data>
   <data name="Command_Prompt_Reject3dPolyline" xml:space="preserve">
     <value>Only 3d polylines allowed.</value>
   </data>
+  <data name="Command_Prompt_RejectBlockReference" xml:space="preserve">
+    <value>Only block references allowed.</value>
+  </data>
   <data name="Command_Prompt_SelectEndPoint" xml:space="preserve">
-    <value>\nSelect end point :</value>
+    <value>
+Select end point</value>
   </data>
   <data name="Command_Prompt_SelectFootwayPoint" xml:space="preserve">
-    <value>\nSelect back of footway point : </value>
+    <value>
+Select back of footway point</value>
   </data>
   <data name="Command_Prompt_SelectRoadString" xml:space="preserve">
-    <value>\nSelect road string : </value>
+    <value>
+Select road string</value>
+  </data>
+  <data name="Command_Prompt_SelectStartLevelBlock" xml:space="preserve">
+    <value>
+Select start level block</value>
   </data>
   <data name="Command_Prompt_SelectStartPoint" xml:space="preserve">
-    <value>\nSelect start point : </value>
+    <value>
+Select start point</value>
+  </data>
+  <data name="Exception_NoLevelBlock" xml:space="preserve">
+    <value>No level block.</value>
+  </data>
+  <data name="ExtensionApplication_UI_BtnLevelBlockFromBlock" xml:space="preserve">
+    <value>From Block At Gradient</value>
+  </data>
+  <data name="ExtensionApplication_UI_BtnLevelBlockFromPoint" xml:space="preserve">
+    <value>From Point At Gradient</value>
+  </data>
+  <data name="ExtensionApplication_UI_BtnLevelBlocks" xml:space="preserve">
+    <value>Level Blocks</value>
+  </data>
+  <data name="ExtensionApplication_UI_PanelTitle" xml:space="preserve">
+    <value>Housing</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="level_block_large" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\level-block-large.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="level_block_small" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\level-block-small.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

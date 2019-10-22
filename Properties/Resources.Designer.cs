@@ -61,7 +61,8 @@ namespace Jpp.Ironstone.Housing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to \nEnter a gradient (1 in) : .
+        ///   Looks up a localized string similar to 
+        ///Enter a gradient (1 in) .
         /// </summary>
         internal static string Command_Prompt_EnterGradient {
             get {
@@ -70,7 +71,8 @@ namespace Jpp.Ironstone.Housing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to \nEnter a level :.
+        ///   Looks up a localized string similar to 
+        ///Enter a level.
         /// </summary>
         internal static string Command_Prompt_EnterLevel {
             get {
@@ -88,7 +90,17 @@ namespace Jpp.Ironstone.Housing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to \nSelect end point :.
+        ///   Looks up a localized string similar to Only block references allowed..
+        /// </summary>
+        internal static string Command_Prompt_RejectBlockReference {
+            get {
+                return ResourceManager.GetString("Command_Prompt_RejectBlockReference", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///Select end point.
         /// </summary>
         internal static string Command_Prompt_SelectEndPoint {
             get {
@@ -97,7 +109,8 @@ namespace Jpp.Ironstone.Housing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to \nSelect back of footway point : .
+        ///   Looks up a localized string similar to 
+        ///Select back of footway point.
         /// </summary>
         internal static string Command_Prompt_SelectFootwayPoint {
             get {
@@ -106,7 +119,8 @@ namespace Jpp.Ironstone.Housing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to \nSelect road string : .
+        ///   Looks up a localized string similar to 
+        ///Select road string.
         /// </summary>
         internal static string Command_Prompt_SelectRoadString {
             get {
@@ -115,11 +129,87 @@ namespace Jpp.Ironstone.Housing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to \nSelect start point : .
+        ///   Looks up a localized string similar to 
+        ///Select start level block.
+        /// </summary>
+        internal static string Command_Prompt_SelectStartLevelBlock {
+            get {
+                return ResourceManager.GetString("Command_Prompt_SelectStartLevelBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///Select start point.
         /// </summary>
         internal static string Command_Prompt_SelectStartPoint {
             get {
                 return ResourceManager.GetString("Command_Prompt_SelectStartPoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No level block..
+        /// </summary>
+        internal static string Exception_NoLevelBlock {
+            get {
+                return ResourceManager.GetString("Exception_NoLevelBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to From Block At Gradient.
+        /// </summary>
+        internal static string ExtensionApplication_UI_BtnLevelBlockFromBlock {
+            get {
+                return ResourceManager.GetString("ExtensionApplication_UI_BtnLevelBlockFromBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to From Point At Gradient.
+        /// </summary>
+        internal static string ExtensionApplication_UI_BtnLevelBlockFromPoint {
+            get {
+                return ResourceManager.GetString("ExtensionApplication_UI_BtnLevelBlockFromPoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Level Blocks.
+        /// </summary>
+        internal static string ExtensionApplication_UI_BtnLevelBlocks {
+            get {
+                return ResourceManager.GetString("ExtensionApplication_UI_BtnLevelBlocks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Housing.
+        /// </summary>
+        internal static string ExtensionApplication_UI_PanelTitle {
+            get {
+                return ResourceManager.GetString("ExtensionApplication_UI_PanelTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap level_block_large {
+            get {
+                object obj = ResourceManager.GetObject("level_block_large", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap level_block_small {
+            get {
+                object obj = ResourceManager.GetObject("level_block_small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }
