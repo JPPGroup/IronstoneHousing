@@ -1,7 +1,12 @@
 ﻿using Autodesk.AutoCAD.Runtime;
+using Autodesk.Windows;
 using Jpp.Ironstone.Core;
 using Jpp.Ironstone.Core.ServiceInterfaces;
+using Jpp.Ironstone.Core.UI;
 using Jpp.Ironstone.Housing;
+using Jpp.Ironstone.Housing.Commands;
+using Jpp.Ironstone.Housing.Properties;
+using System.Windows.Controls;
 using Unity;
 
 [assembly: ExtensionApplication(typeof(HousingExtensionApplication))]
@@ -12,7 +17,36 @@ namespace Jpp.Ironstone.Housing
         public ILogger Logger { get; set; }
         public static HousingExtensionApplication Current { get; private set; }
 
-        public void CreateUI() { }
+        public void CreateUI()
+        {
+            var cmdBlockFromPoint = UIHelper.GetCommandGlobalName(typeof(LevelBlockCommands), nameof(LevelBlockCommands.CalculateLevelFromPoint));
+            var cmdBlockFromBlock = UIHelper.GetCommandGlobalName(typeof(LevelBlockCommands), nameof(LevelBlockCommands.CalculateLevelFromLevelBlock));
+
+            var btnBlockFromPoint = UIHelper.CreateButton(Resources.ExtensionApplication_UI_BtnLevelBlockFromPoint, Resources.level_block_small, RibbonItemSize.Standard, cmdBlockFromPoint);
+            var btnBlockFromBlock = UIHelper.CreateButton(Resources.ExtensionApplication_UI_BtnLevelBlockFromBlock, Resources.level_block_small, RibbonItemSize.Standard, cmdBlockFromBlock);
+
+            var btnSplitLevel = new RibbonSplitButton
+            {
+                ShowText = true,
+                IsSplit = false,
+                Size = RibbonItemSize.Large,
+                LargeImage = UIHelper.LoadImage(Resources.level_block_large),
+                Text = Resources.ExtensionApplication_UI_BtnLevelBlocks,
+                Orientation = Orientation.Vertical,
+                IsSynchronizedWithCurrentItem = false
+            };
+
+            btnSplitLevel.Items.Add(btnBlockFromPoint);
+            btnSplitLevel.Items.Add(btnBlockFromBlock);
+
+            var source = new RibbonPanelSource { Title = Resources.ExtensionApplication_UI_PanelTitle };
+            source.Items.Add(btnSplitLevel);
+
+            var panel = new RibbonPanel { Source = source };
+            var ribbon = ComponentManager.Ribbon;
+            var tab = ribbon.FindTab(Constants.IRONSTONE_CONCEPT_TAB_ID);
+            tab.Panels.Add(panel);
+        }
 
         public void Initialize()
         {
