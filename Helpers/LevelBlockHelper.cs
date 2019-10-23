@@ -11,7 +11,7 @@ namespace Jpp.Ironstone.Housing.Helpers
 
         public static bool HasLevelBlock(Database database)
         {
-            using var trans = database.TransactionManager.TopTransaction;
+            var trans = database.TransactionManager.TopTransaction;
             var bt = (BlockTable)trans.GetObject(database.BlockTableId, OpenMode.ForRead);
             var hasLevelBlock = false;
 
@@ -35,7 +35,7 @@ namespace Jpp.Ironstone.Housing.Helpers
 
         public static double? GetLevelFromBlock(BlockReference block)
         {
-            using var trans = block.Database.TransactionManager.TopTransaction;
+            var trans = block.Database.TransactionManager.TopTransaction;
             double? level = null;
 
             foreach (ObjectId attObjId in block.AttributeCollection)
@@ -55,7 +55,7 @@ namespace Jpp.Ironstone.Housing.Helpers
 
         public static void NewLevelBlockAtPoint(Database database, Point3d point, double level)
         {
-            using var trans = database.TransactionManager.TopTransaction;
+            var trans = database.TransactionManager.TopTransaction;
             var bt = (BlockTable)trans.GetObject(database.BlockTableId, OpenMode.ForRead);
             foreach (var btrId in bt)
             {
@@ -82,17 +82,20 @@ namespace Jpp.Ironstone.Housing.Helpers
                             {
                                 if (acAtt.Constant) continue;
 
-                                using var acAttRef = new AttributeReference();
-                                if (string.Equals(acAtt.Tag, LEVEL_ATTRIBUTE_NAME, StringComparison.CurrentCultureIgnoreCase))
+                                using (var acAttRef = new AttributeReference())
                                 {
-                                    acAttRef.SetAttributeFromBlock(acAtt, blockRef.BlockTransform);
-                                    acAttRef.Position = acAtt.Position.TransformBy(blockRef.BlockTransform);
+                                    if (string.Equals(acAtt.Tag, LEVEL_ATTRIBUTE_NAME, StringComparison.CurrentCultureIgnoreCase))
+                                    {
+                                        acAttRef.SetAttributeFromBlock(acAtt, blockRef.BlockTransform);
+                                        acAttRef.Position = acAtt.Position.TransformBy(blockRef.BlockTransform);
 
-                                    acAttRef.TextString = $"{level:0.000}";
-                                    blockRef.AttributeCollection.AppendAttribute(acAttRef);
-                                    trans.AddNewlyCreatedDBObject(acAttRef, true);
+                                        acAttRef.TextString = $"{level:0.000}";
+                                        blockRef.AttributeCollection.AppendAttribute(acAttRef);
+                                        trans.AddNewlyCreatedDBObject(acAttRef, true);
+                                    }
                                 }
                             }
+                                    
                         }
                     }
 

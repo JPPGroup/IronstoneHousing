@@ -96,10 +96,11 @@ namespace Jpp.Ironstone.Housing.Commands
 
         private static void GenerateBlock(Point3d startPoint, Point3d endPoint, double startLevel, double gradient, Database db)
         {
-            using var line = new Line(startPoint, endPoint);
-            var endLevel = startLevel + line.Length * (1 / gradient);
-
-            LevelBlockHelper.NewLevelBlockAtPoint(db, endPoint, endLevel);
+            using (var line = new Line(startPoint, endPoint))
+            {
+                var endLevel = startLevel + line.Length * (1 / gradient);
+                LevelBlockHelper.NewLevelBlockAtPoint(db, endPoint, endLevel);
+            }
         }
     }
 }

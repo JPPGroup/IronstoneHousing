@@ -48,20 +48,20 @@ namespace Jpp.Ironstone.Housing.Commands
             var roadString = SelectRoadString(db, ed);
             if (roadString == null) return;
 
-            using var plane = new Plane(Point3d.Origin, Vector3d.ZAxis);
-            var vectorNormal = plane.Normal;
-
-            var point = ed.PromptForPosition(Resources.Command_Prompt_SelectFootwayPoint);
-
-            while (point.HasValue)
+            using (var plane = new Plane(Point3d.Origin, Vector3d.ZAxis))
             {
-                var roadPoint = roadString.GetClosestPointTo(point.Value, vectorNormal, false);
-                var roadLevel = Math.Round(roadPoint.Z, 3);
-                var footwayLevel = roadLevel + level;
+                var point = ed.PromptForPosition(Resources.Command_Prompt_SelectFootwayPoint);
 
-                LevelBlockHelper.NewLevelBlockAtPoint(db, point.Value, footwayLevel);
+                while (point.HasValue)
+                {
+                    var roadPoint = roadString.GetClosestPointTo(point.Value, plane.Normal, false);
+                    var roadLevel = Math.Round(roadPoint.Z, 3);
+                    var footwayLevel = roadLevel + level;
 
-                point = ed.PromptForPosition(Resources.Command_Prompt_SelectFootwayPoint);
+                    LevelBlockHelper.NewLevelBlockAtPoint(db, point.Value, footwayLevel);
+
+                    point = ed.PromptForPosition(Resources.Command_Prompt_SelectFootwayPoint);
+                }
             }
 
             trans.Commit();
@@ -72,7 +72,7 @@ namespace Jpp.Ironstone.Housing.Commands
             var objectId = editor.PromptForEntity(Resources.Command_Prompt_SelectRoadString, typeof(Polyline3d),Resources.Command_Prompt_Reject3dPolyline, true);
             if (!objectId.HasValue) return null;
 
-            using var trans = database.TransactionManager.TopTransaction;
+            var trans = database.TransactionManager.TopTransaction;
             return trans.GetObject(objectId.Value, OpenMode.ForRead) as Polyline3d;
         }
     }
