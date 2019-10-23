@@ -19,11 +19,13 @@ namespace Jpp.Ironstone.Housing
 
         public void CreateUI()
         {
-            var cmdBlockFromPoint = UIHelper.GetCommandGlobalName(typeof(LevelBlockCommands), nameof(LevelBlockCommands.CalculateLevelFromPoint));
-            var cmdBlockFromBlock = UIHelper.GetCommandGlobalName(typeof(LevelBlockCommands), nameof(LevelBlockCommands.CalculateLevelFromLevelBlock));
+            var cmdBlockFromPointAtGradient = UIHelper.GetCommandGlobalName(typeof(LevelBlockCommands), nameof(LevelBlockCommands.CalculateLevelFromPointAtGradient));
+            var cmdBlockFromBlockAtGradient = UIHelper.GetCommandGlobalName(typeof(LevelBlockCommands), nameof(LevelBlockCommands.CalculateLevelFromLevelBlockAtGradient));
+            var cmdBlockFromBlockWithInvert = UIHelper.GetCommandGlobalName(typeof(LevelBlockCommands), nameof(LevelBlockCommands.CalculateLevelFromLevelBlockWithInvert));
 
-            var btnBlockFromPoint = UIHelper.CreateButton(Resources.ExtensionApplication_UI_BtnLevelBlockFromPoint, Resources.level_block_small, RibbonItemSize.Standard, cmdBlockFromPoint);
-            var btnBlockFromBlock = UIHelper.CreateButton(Resources.ExtensionApplication_UI_BtnLevelBlockFromBlock, Resources.level_block_small, RibbonItemSize.Standard, cmdBlockFromBlock);
+            var btnBlockFromPointAtGradient = UIHelper.CreateButton(Resources.ExtensionApplication_UI_BtnLevelBlockFromPointAtGradient, Resources.level_block_small, RibbonItemSize.Standard, cmdBlockFromPointAtGradient);
+            var btnBlockFromBlockAtGradient = UIHelper.CreateButton(Resources.ExtensionApplication_UI_BtnLevelBlockFromBlockAtGradient, Resources.level_block_small, RibbonItemSize.Standard, cmdBlockFromBlockAtGradient);
+            var btnBlockFromBlockWithInvert = UIHelper.CreateButton(Resources.ExtensionApplication_UI_BtnLevelBlockFromBlockWithInvert, Resources.level_block_small, RibbonItemSize.Standard, cmdBlockFromBlockWithInvert);
 
             var btnSplitLevel = new RibbonSplitButton
             {
@@ -36,8 +38,9 @@ namespace Jpp.Ironstone.Housing
                 IsSynchronizedWithCurrentItem = false
             };
 
-            btnSplitLevel.Items.Add(btnBlockFromPoint);
-            btnSplitLevel.Items.Add(btnBlockFromBlock);
+            btnSplitLevel.Items.Add(btnBlockFromPointAtGradient);
+            btnSplitLevel.Items.Add(btnBlockFromBlockAtGradient);
+            btnSplitLevel.Items.Add(btnBlockFromBlockWithInvert);
 
             var source = new RibbonPanelSource { Title = Resources.ExtensionApplication_UI_PanelTitle };
             source.Items.Add(btnSplitLevel);
