@@ -279,5 +279,45 @@ namespace Jpp.Ironstone.Housing.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///Invalid level block selected..
+        /// </summary>
+        internal static string Message_Invalid_Level_Block_Selected {
+            get {
+                return ResourceManager.GetString("Message_Invalid_Level_Block_Selected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///Levels set on blocks are equal..
+        /// </summary>
+        internal static string Message_Levels_Are_Equal {
+            get {
+                return ResourceManager.GetString("Message_Levels_Are_Equal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///No level set on block..
+        /// </summary>
+        internal static string Message_No_Level_Set_On_Block {
+            get {
+                return ResourceManager.GetString("Message_No_Level_Set_On_Block", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///No road string selected..
+        /// </summary>
+        internal static string Message_No_Road_String_Selected {
+            get {
+                return ResourceManager.GetString("Message_No_Road_String_Selected", resourceCulture);
+            }
+        }
     }
 }

@@ -6,6 +6,10 @@ namespace Jpp.Ironstone.Housing.Helpers
 {
     internal static class GradientBlockHelper
     {
+        /*
+         * Consider moving constants below to setting, or similar.
+         * At the moment assuming that if these names are changed, then there might be other breaking changes.
+         */
         private const string GRADIENT_BLOCK_NAME = "ProposedGradient";
         private const string GRADIENT_ATTRIBUTE_NAME = "GRADIENT";
         private const string FLIP_ATTRIBUTE_NAME = "Flip state1";

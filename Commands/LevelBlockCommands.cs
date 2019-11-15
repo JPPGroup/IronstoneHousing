@@ -39,16 +39,16 @@ namespace Jpp.Ironstone.Housing.Commands
             if (!LevelBlockHelper.HasLevelBlock(db)) throw new ArgumentException(Resources.Exception_NoLevelBlock);
 
             var startPoint = ed.PromptForPosition(Resources.Command_Prompt_SelectStartPoint);
-            if (!startPoint.HasValue) return;
+            if (!startPoint.HasValue) return; //Assume user cancelled
 
             var startLevel = ed.PromptForDouble(Resources.Command_Prompt_EnterLevel, _level);
-            if (!startLevel.HasValue) return;
+            if (!startLevel.HasValue) return; //Assume user cancelled
 
             var gradient = ed.PromptForDouble(Resources.Command_Prompt_EnterGradient, _gradient);
-            if (!gradient.HasValue) return;
+            if (!gradient.HasValue) return; //Assume user cancelled
 
             var endPoint = ed.PromptForPosition(Resources.Command_Prompt_SelectEndPoint);
-            if (!endPoint.HasValue) return;
+            if (!endPoint.HasValue) return; //Assume user cancelled
 
             GenerateBlock(startPoint.Value, endPoint.Value, startLevel.Value, gradient.Value, db);
 
@@ -75,22 +75,29 @@ namespace Jpp.Ironstone.Housing.Commands
             if (!LevelBlockHelper.HasLevelBlock(db)) throw new ArgumentException(Resources.Exception_NoLevelBlock);
 
             var startObjectId = ed.PromptForEntity(Resources.Command_Prompt_SelectStartLevelBlock, typeof(BlockReference), Resources.Command_Prompt_RejectBlockReference, true);
-            if (!startObjectId.HasValue) return;
+            if (!startObjectId.HasValue) return; //Assume user cancelled
 
-            var startBlock = (BlockReference)trans.GetObject(startObjectId.Value, OpenMode.ForRead);
-
-            if (!LevelBlockHelper.IsLevelBlockReference(startBlock)) return;
+            var startBlock = LevelBlockHelper.GetBlockReference(startObjectId.Value, trans);
+            if (startBlock == null) 
+            {
+                HousingExtensionApplication.Current.Logger.Entry(Resources.Message_Invalid_Level_Block_Selected);
+                return;
+            }
 
             var startLevel = LevelBlockHelper.GetLevelFromBlock(startBlock);
-            if (!startLevel.HasValue) return;
+            if (!startLevel.HasValue) 
+            {
+                HousingExtensionApplication.Current.Logger.Entry(Resources.Message_No_Level_Set_On_Block);
+                return;
+            }
 
             var startPoint = startBlock.Position;
 
             var gradient = ed.PromptForDouble(Resources.Command_Prompt_EnterGradient, _gradient);
-            if (!gradient.HasValue) return;
+            if (!gradient.HasValue) return; //Assume user cancelled
 
             var endPoint = ed.PromptForPosition(Resources.Command_Prompt_SelectEndPoint);
-            if (!endPoint.HasValue) return;
+            if (!endPoint.HasValue) return; //Assume user cancelled
 
             var endBlock = GenerateBlock(startPoint, endPoint.Value, startLevel.Value, gradient.Value, db);
 
@@ -118,20 +125,27 @@ namespace Jpp.Ironstone.Housing.Commands
             if (!LevelBlockHelper.HasLevelBlock(db)) throw new ArgumentException(Resources.Exception_NoLevelBlock);
 
             var startObjectId = ed.PromptForEntity(Resources.Command_Prompt_SelectStartLevelBlock, typeof(BlockReference), Resources.Command_Prompt_RejectBlockReference, true);
-            if (!startObjectId.HasValue) return;
+            if (!startObjectId.HasValue) return; //Assume user cancelled
 
-            var startBlock = (BlockReference)trans.GetObject(startObjectId.Value, OpenMode.ForRead);
-
-            if (!LevelBlockHelper.IsLevelBlockReference(startBlock)) return;
+            var startBlock = LevelBlockHelper.GetBlockReference(startObjectId.Value, trans);
+            if (startBlock == null) 
+            {
+                HousingExtensionApplication.Current.Logger.Entry(Resources.Message_Invalid_Level_Block_Selected);
+                return;
+            }
 
             var startLevel = LevelBlockHelper.GetLevelFromBlock(startBlock);
-            if (!startLevel.HasValue) return;
+            if (!startLevel.HasValue)
+            {
+                HousingExtensionApplication.Current.Logger.Entry(Resources.Message_No_Level_Set_On_Block);
+                return;
+            }
 
             var invert = ed.PromptForDouble(Resources.Command_Prompt_EnterInvert, _invert);
-            if (!invert.HasValue) return;
+            if (!invert.HasValue) return; //Assume user cancelled
 
             var endPoint = ed.PromptForPosition(Resources.Command_Prompt_SelectEndPoint);
-            if (!endPoint.HasValue) return;
+            if (!endPoint.HasValue) return; //Assume user cancelled
 
             var endLevel = startLevel.Value - (invert.Value / 1000);
 
@@ -147,7 +161,10 @@ namespace Jpp.Ironstone.Housing.Commands
 
         private static BlockReference GenerateBlock(Point3d startPoint, Point3d endPoint, double startLevel, double gradient, Database db)
         {
-            using (var line = new Line(startPoint, endPoint))
+            //TODO: Convert to 2d points
+            var s = new Point3d(startPoint.X, startPoint.Y, 0); //Remove z for line length
+            var e = new Point3d(endPoint.X, endPoint.Y, 0); //Remove z for line length
+            using (var line = new Line(s, e))
             {
                 var endLevel = startLevel + line.Length * (1 / gradient);
                 return LevelBlockHelper.NewLevelBlockAtPoint(db, endPoint, endLevel);

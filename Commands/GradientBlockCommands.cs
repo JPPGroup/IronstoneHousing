@@ -31,16 +31,24 @@ namespace Jpp.Ironstone.Housing.Commands
             if (!GradientBlockHelper.HasGradientBlock(db)) throw new ArgumentException(Resources.Exception_NoGradientBlock);
 
             var startObjectId = ed.PromptForEntity(Resources.Command_Prompt_SelectStartLevelBlock, typeof(BlockReference), Resources.Command_Prompt_RejectBlockReference, true);
-            if (!startObjectId.HasValue) return;
+            if (!startObjectId.HasValue) return; //Assume user cancelled
 
-            var startBlock = (BlockReference)trans.GetObject(startObjectId.Value, OpenMode.ForRead);
-            if (!LevelBlockHelper.IsLevelBlockReference(startBlock)) return;
+            var startBlock = LevelBlockHelper.GetBlockReference(startObjectId.Value, trans);
+            if (startBlock == null) 
+            {
+                HousingExtensionApplication.Current.Logger.Entry(Resources.Message_Invalid_Level_Block_Selected);
+                return;
+            }
 
             var endObjectId = ed.PromptForEntity(Resources.Command_Prompt_SelectEndLevelBlock, typeof(BlockReference), Resources.Command_Prompt_RejectBlockReference, true);
-            if (!endObjectId.HasValue) return;
+            if (!endObjectId.HasValue) return; //Assume user cancelled
 
-            var endBlock = (BlockReference)trans.GetObject(endObjectId.Value, OpenMode.ForRead);
-            if (!LevelBlockHelper.IsLevelBlockReference(endBlock)) return;
+            var endBlock = LevelBlockHelper.GetBlockReference(endObjectId.Value, trans);
+            if (endBlock == null) 
+            {
+                HousingExtensionApplication.Current.Logger.Entry(Resources.Message_Invalid_Level_Block_Selected);
+                return;
+            }
 
             GenerateGradientBlock(db, startBlock, endBlock);
 
@@ -52,38 +60,47 @@ namespace Jpp.Ironstone.Housing.Commands
             var xLevel = LevelBlockHelper.GetLevelFromBlock(x);
             var yLevel = LevelBlockHelper.GetLevelFromBlock(y);
 
-            if(!xLevel.HasValue || !yLevel.HasValue) return;
-            if (xLevel.Value.Equals(yLevel.Value)) return;
+            if (!xLevel.HasValue || !yLevel.HasValue)
+            {
+                HousingExtensionApplication.Current.Logger.Entry(Resources.Message_No_Level_Set_On_Block);
+                return;
+            }
 
-            Point3d startPoint;
-            Point3d endPoint;
+            if (xLevel.Value.Equals(yLevel.Value))
+            {
+                HousingExtensionApplication.Current.Logger.Entry(Resources.Message_Levels_Are_Equal);
+                return;
+            }
+
+            Point2d startPoint;
+            Point2d endPoint;
             double startLevel;
             double endLevel;
+
+            var plane = new Plane(Point3d.Origin, Vector3d.ZAxis);
 
             //Always point downhill
             if (xLevel.Value > yLevel.Value)
             {
-                startPoint = x.Position;
+                startPoint = x.Position.Convert2d(plane);
                 startLevel = xLevel.Value;
-                endPoint = y.Position;
+                endPoint = y.Position.Convert2d(plane);
                 endLevel = yLevel.Value;
             }
             else
             {
-                startPoint = y.Position;
+                startPoint = y.Position.Convert2d(plane);
                 startLevel = yLevel.Value;
-                endPoint = x.Position;
+                endPoint = x.Position.Convert2d(plane);
                 endLevel = xLevel.Value;
             }
             
             var vector = endPoint.GetAsVector() - startPoint.GetAsVector();
             var gradient = 1 / ((startLevel - endLevel) / vector.Length);
             var midPoint = startPoint + vector * 0.5;
-            var plane = new Plane(Point3d.Origin, Vector3d.ZAxis);
-            var rotation = vector.AngleOnPlane(plane);
+            var rotation = vector.Angle;
 
-
-            GradientBlockHelper.NewGradientBlockAtPoint(database, midPoint, gradient, rotation);
+            GradientBlockHelper.NewGradientBlockAtPoint(database, new Point3d(plane, midPoint), gradient, rotation);
         }
     }
 }

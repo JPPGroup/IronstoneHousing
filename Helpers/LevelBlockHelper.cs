@@ -6,7 +6,11 @@ namespace Jpp.Ironstone.Housing.Helpers
 {
     internal static class LevelBlockHelper
     {
-        private const string LEVEL_BLOCK_NAME = "ProposedLevel";
+        /*
+         * Consider moving constants below to setting, or similar.
+         * At the moment assuming that if these names are changed, then there might be other breaking changes.
+         */
+        private const string LEVEL_BLOCK_NAME = "ProposedLevel"; 
         private const string LEVEL_ATTRIBUTE_NAME = "LEVEL";
 
         public static bool HasLevelBlock(Database database)
@@ -28,9 +32,10 @@ namespace Jpp.Ironstone.Housing.Helpers
             return hasLevelBlock;
         }
 
-        public static bool IsLevelBlockReference(BlockReference block)
+        public static BlockReference GetBlockReference(ObjectId objectId, Transaction transaction)
         {
-            return string.Equals(block.Name, LEVEL_BLOCK_NAME, StringComparison.CurrentCultureIgnoreCase);
+            var block = transaction.GetObject(objectId, OpenMode.ForRead) as BlockReference;
+            return string.Equals(block?.Name, LEVEL_BLOCK_NAME, StringComparison.CurrentCultureIgnoreCase) ? block : null;
         }
 
         public static double? GetLevelFromBlock(BlockReference block)
@@ -45,7 +50,10 @@ namespace Jpp.Ironstone.Housing.Helpers
                 {
                     if (string.Equals(attRef.Tag, LEVEL_ATTRIBUTE_NAME, StringComparison.CurrentCultureIgnoreCase))
                     {
-                        level = Convert.ToDouble(attRef.TextString);
+                        if (double.TryParse(attRef.TextString, out var result))
+                        {
+                            level = result;
+                        }
                     }
                 }
             }
@@ -67,7 +75,7 @@ namespace Jpp.Ironstone.Housing.Helpers
 
                     var blockRef = new BlockReference(point, blockId)
                     {
-                        ScaleFactors = new Scale3d(0.2, 0.2, 0.2)
+                        ScaleFactors = new Scale3d(0.2, 0.2, 0.2) //Block is annotative, scaled to match as advise by TL.
                     };
 
                     modelSpaceRecord.AppendEntity(blockRef);
