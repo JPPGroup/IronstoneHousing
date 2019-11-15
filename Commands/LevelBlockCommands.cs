@@ -161,7 +161,6 @@ namespace Jpp.Ironstone.Housing.Commands
 
         private static BlockReference GenerateBlock(Point3d startPoint, Point3d endPoint, double startLevel, double gradient, Database db)
         {
-            //TODO: Convert to 2d points
             var s = new Point3d(startPoint.X, startPoint.Y, 0); //Remove z for line length
             var e = new Point3d(endPoint.X, endPoint.Y, 0); //Remove z for line length
             using (var line = new Line(s, e))
