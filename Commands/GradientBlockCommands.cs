@@ -33,22 +33,11 @@ namespace Jpp.Ironstone.Housing.Commands
             var startObjectId = ed.PromptForEntity(Resources.Command_Prompt_SelectStartLevelBlock, typeof(BlockReference), Resources.Command_Prompt_RejectBlockReference, true);
             if (!startObjectId.HasValue) return; //Assume user cancelled
 
-            var startBlock = LevelBlockHelper.GetBlockReference(startObjectId.Value, trans);
-            if (startBlock == null) 
-            {
-                HousingExtensionApplication.Current.Logger.Entry(Resources.Message_Invalid_Level_Block_Selected);
-                return;
-            }
+            var startBlock = LevelBlockHelper.GetPromptedBlock(Resources.Command_Prompt_SelectStartLevelBlock, ed, trans);
+            if (startBlock == null) return; //Assume user cancelled
 
-            var endObjectId = ed.PromptForEntity(Resources.Command_Prompt_SelectEndLevelBlock, typeof(BlockReference), Resources.Command_Prompt_RejectBlockReference, true);
-            if (!endObjectId.HasValue) return; //Assume user cancelled
-
-            var endBlock = LevelBlockHelper.GetBlockReference(endObjectId.Value, trans);
-            if (endBlock == null) 
-            {
-                HousingExtensionApplication.Current.Logger.Entry(Resources.Message_Invalid_Level_Block_Selected);
-                return;
-            }
+            var endBlock = LevelBlockHelper.GetPromptedBlock(Resources.Command_Prompt_SelectEndLevelBlock, ed, trans);
+            if (endBlock == null) return; //Assume user cancelled
 
             GenerateGradientBlock(db, startBlock, endBlock);
 

@@ -74,15 +74,8 @@ namespace Jpp.Ironstone.Housing.Commands
 
             if (!LevelBlockHelper.HasLevelBlock(db)) throw new ArgumentException(Resources.Exception_NoLevelBlock);
 
-            var startObjectId = ed.PromptForEntity(Resources.Command_Prompt_SelectStartLevelBlock, typeof(BlockReference), Resources.Command_Prompt_RejectBlockReference, true);
-            if (!startObjectId.HasValue) return; //Assume user cancelled
-
-            var startBlock = LevelBlockHelper.GetBlockReference(startObjectId.Value, trans);
-            if (startBlock == null) 
-            {
-                HousingExtensionApplication.Current.Logger.Entry(Resources.Message_Invalid_Level_Block_Selected);
-                return;
-            }
+            var startBlock = LevelBlockHelper.GetPromptedBlock(Resources.Command_Prompt_SelectStartLevelBlock, ed, trans);
+            if (startBlock == null) return; //Assume user cancelled
 
             var startLevel = LevelBlockHelper.GetLevelFromBlock(startBlock);
             if (!startLevel.HasValue) 
@@ -124,15 +117,8 @@ namespace Jpp.Ironstone.Housing.Commands
 
             if (!LevelBlockHelper.HasLevelBlock(db)) throw new ArgumentException(Resources.Exception_NoLevelBlock);
 
-            var startObjectId = ed.PromptForEntity(Resources.Command_Prompt_SelectStartLevelBlock, typeof(BlockReference), Resources.Command_Prompt_RejectBlockReference, true);
-            if (!startObjectId.HasValue) return; //Assume user cancelled
-
-            var startBlock = LevelBlockHelper.GetBlockReference(startObjectId.Value, trans);
-            if (startBlock == null) 
-            {
-                HousingExtensionApplication.Current.Logger.Entry(Resources.Message_Invalid_Level_Block_Selected);
-                return;
-            }
+            var startBlock = LevelBlockHelper.GetPromptedBlock(Resources.Command_Prompt_SelectStartLevelBlock, ed, trans);
+            if (startBlock == null) return; //Assume user cancelled
 
             var startLevel = LevelBlockHelper.GetLevelFromBlock(startBlock);
             if (!startLevel.HasValue)
@@ -157,7 +143,6 @@ namespace Jpp.Ironstone.Housing.Commands
 
             trans.Commit();
         }
-
 
         private static BlockReference GenerateBlock(Point3d startPoint, Point3d endPoint, double startLevel, double gradient, Database db)
         {

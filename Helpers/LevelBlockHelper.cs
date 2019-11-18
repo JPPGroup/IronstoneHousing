@@ -1,6 +1,9 @@
 ﻿using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
 using System;
+using Autodesk.AutoCAD.EditorInput;
+using Jpp.Ironstone.Core.UI.Autocad;
+using Jpp.Ironstone.Housing.Properties;
 
 namespace Jpp.Ironstone.Housing.Helpers
 {
@@ -32,7 +35,19 @@ namespace Jpp.Ironstone.Housing.Helpers
             return hasLevelBlock;
         }
 
-        public static BlockReference GetBlockReference(ObjectId objectId, Transaction transaction)
+        public static BlockReference GetPromptedBlock(string promptTest, Editor ed, Transaction trans)
+        {
+            var objectId = ed.PromptForEntity(promptTest, typeof(BlockReference), Resources.Command_Prompt_RejectBlockReference, true);
+            if (!objectId.HasValue) return null;
+
+            var block = GetBlockReference(objectId.Value, trans);
+            if (block != null) return block;
+
+            HousingExtensionApplication.Current.Logger.Entry(Resources.Message_Invalid_Level_Block_Selected);
+            return null;
+        }
+
+        private static BlockReference GetBlockReference(ObjectId objectId, Transaction transaction)
         {
             var block = transaction.GetObject(objectId, OpenMode.ForRead) as BlockReference;
             return string.Equals(block?.Name, LEVEL_BLOCK_NAME, StringComparison.CurrentCultureIgnoreCase) ? block : null;
