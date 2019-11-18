@@ -62,7 +62,7 @@ namespace Jpp.Ironstone.Housing.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to 
-        ///Enter a gradient (1 in) .
+        ///Enter a gradient (1 in).
         /// </summary>
         internal static string Command_Prompt_EnterGradient {
             get {
@@ -71,7 +71,8 @@ namespace Jpp.Ironstone.Housing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter a invert (mm).
+        ///   Looks up a localized string similar to 
+        ///Enter a invert (mm).
         /// </summary>
         internal static string Command_Prompt_EnterInvert {
             get {
@@ -90,6 +91,16 @@ namespace Jpp.Ironstone.Housing.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 
+        ///Include gradient.
+        /// </summary>
+        internal static string Command_Prompt_IncludeGradientBlock {
+            get {
+                return ResourceManager.GetString("Command_Prompt_IncludeGradientBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Only 3d polylines allowed..
         /// </summary>
         internal static string Command_Prompt_Reject3dPolyline {
@@ -104,6 +115,16 @@ namespace Jpp.Ironstone.Housing.Properties {
         internal static string Command_Prompt_RejectBlockReference {
             get {
                 return ResourceManager.GetString("Command_Prompt_RejectBlockReference", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///Select end level block.
+        /// </summary>
+        internal static string Command_Prompt_SelectEndLevelBlock {
+            get {
+                return ResourceManager.GetString("Command_Prompt_SelectEndLevelBlock", resourceCulture);
             }
         }
         
@@ -158,11 +179,29 @@ namespace Jpp.Ironstone.Housing.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No gradient block..
+        /// </summary>
+        internal static string Exception_NoGradientBlock {
+            get {
+                return ResourceManager.GetString("Exception_NoGradientBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No level block..
         /// </summary>
         internal static string Exception_NoLevelBlock {
             get {
                 return ResourceManager.GetString("Exception_NoLevelBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gradient Block.
+        /// </summary>
+        internal static string ExtensionApplication_UI_BtnGradientBetweenBlocks {
+            get {
+                return ResourceManager.GetString("ExtensionApplication_UI_BtnGradientBetweenBlocks", resourceCulture);
             }
         }
         
@@ -194,7 +233,7 @@ namespace Jpp.Ironstone.Housing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Level Blocks.
+        ///   Looks up a localized string similar to Level Block.
         /// </summary>
         internal static string ExtensionApplication_UI_BtnLevelBlocks {
             get {
@@ -208,6 +247,16 @@ namespace Jpp.Ironstone.Housing.Properties {
         internal static string ExtensionApplication_UI_PanelTitle {
             get {
                 return ResourceManager.GetString("ExtensionApplication_UI_PanelTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap gradient_large {
+            get {
+                object obj = ResourceManager.GetObject("gradient_large", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -228,6 +277,46 @@ namespace Jpp.Ironstone.Housing.Properties {
             get {
                 object obj = ResourceManager.GetObject("level_block_small", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///Invalid level block selected..
+        /// </summary>
+        internal static string Message_Invalid_Level_Block_Selected {
+            get {
+                return ResourceManager.GetString("Message_Invalid_Level_Block_Selected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///Levels set on blocks are equal..
+        /// </summary>
+        internal static string Message_Levels_Are_Equal {
+            get {
+                return ResourceManager.GetString("Message_Levels_Are_Equal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///No level set on block..
+        /// </summary>
+        internal static string Message_No_Level_Set_On_Block {
+            get {
+                return ResourceManager.GetString("Message_No_Level_Set_On_Block", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///No road string selected..
+        /// </summary>
+        internal static string Message_No_Road_String_Selected {
+            get {
+                return ResourceManager.GetString("Message_No_Road_String_Selected", resourceCulture);
             }
         }
     }

@@ -1,12 +1,19 @@
 ﻿using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
 using System;
+using Autodesk.AutoCAD.EditorInput;
+using Jpp.Ironstone.Core.UI.Autocad;
+using Jpp.Ironstone.Housing.Properties;
 
 namespace Jpp.Ironstone.Housing.Helpers
 {
-    internal class LevelBlockHelper
+    internal static class LevelBlockHelper
     {
-        private const string LEVEL_BLOCK_NAME = "ProposedLevel";
+        /*
+         * Consider moving constants below to setting, or similar.
+         * At the moment assuming that if these names are changed, then there might be other breaking changes.
+         */
+        private const string LEVEL_BLOCK_NAME = "ProposedLevel"; 
         private const string LEVEL_ATTRIBUTE_NAME = "LEVEL";
 
         public static bool HasLevelBlock(Database database)
@@ -28,9 +35,22 @@ namespace Jpp.Ironstone.Housing.Helpers
             return hasLevelBlock;
         }
 
-        public static bool IsLevelBlockReference(BlockReference block)
+        public static BlockReference GetPromptedBlock(string promptTest, Editor ed, Transaction trans)
         {
-            return string.Equals(block.Name, LEVEL_BLOCK_NAME, StringComparison.CurrentCultureIgnoreCase);
+            var objectId = ed.PromptForEntity(promptTest, typeof(BlockReference), Resources.Command_Prompt_RejectBlockReference, true);
+            if (!objectId.HasValue) return null;
+
+            var block = GetBlockReference(objectId.Value, trans);
+            if (block != null) return block;
+
+            HousingExtensionApplication.Current.Logger.Entry(Resources.Message_Invalid_Level_Block_Selected);
+            return null;
+        }
+
+        private static BlockReference GetBlockReference(ObjectId objectId, Transaction transaction)
+        {
+            var block = transaction.GetObject(objectId, OpenMode.ForRead) as BlockReference;
+            return string.Equals(block?.Name, LEVEL_BLOCK_NAME, StringComparison.CurrentCultureIgnoreCase) ? block : null;
         }
 
         public static double? GetLevelFromBlock(BlockReference block)
@@ -45,7 +65,10 @@ namespace Jpp.Ironstone.Housing.Helpers
                 {
                     if (string.Equals(attRef.Tag, LEVEL_ATTRIBUTE_NAME, StringComparison.CurrentCultureIgnoreCase))
                     {
-                        level = Convert.ToDouble(attRef.TextString);
+                        if (double.TryParse(attRef.TextString, out var result))
+                        {
+                            level = result;
+                        }
                     }
                 }
             }
@@ -53,7 +76,7 @@ namespace Jpp.Ironstone.Housing.Helpers
             return level;
         }
 
-        public static void NewLevelBlockAtPoint(Database database, Point3d point, double level)
+        public static BlockReference NewLevelBlockAtPoint(Database database, Point3d point, double level)
         {
             var trans = database.TransactionManager.TopTransaction;
             var bt = (BlockTable)trans.GetObject(database.BlockTableId, OpenMode.ForRead);
@@ -67,7 +90,7 @@ namespace Jpp.Ironstone.Housing.Helpers
 
                     var blockRef = new BlockReference(point, blockId)
                     {
-                        ScaleFactors = new Scale3d(0.2, 0.2, 0.2)
+                        ScaleFactors = new Scale3d(0.2, 0.2, 0.2) //Block is annotative, scaled to match as advise by TL.
                     };
 
                     modelSpaceRecord.AppendEntity(blockRef);
@@ -101,9 +124,11 @@ namespace Jpp.Ironstone.Housing.Helpers
 
                     database.TransactionManager.QueueForGraphicsFlush();
 
-                    return;
+                    return blockRef;
                 }
             }
+
+            return null;
         }
     }
 }

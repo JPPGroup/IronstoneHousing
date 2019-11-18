@@ -46,7 +46,11 @@ namespace Jpp.Ironstone.Housing.Commands
             if (!LevelBlockHelper.HasLevelBlock(db)) throw new ArgumentException(Resources.Exception_NoLevelBlock);
 
             var roadString = SelectRoadString(db, ed);
-            if (roadString == null) return;
+            if (roadString == null) 
+            {
+                HousingExtensionApplication.Current.Logger.Entry(Resources.Message_No_Road_String_Selected);
+                return;
+            }
 
             using (var plane = new Plane(Point3d.Origin, Vector3d.ZAxis))
             {
