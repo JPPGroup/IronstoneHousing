@@ -151,6 +151,10 @@ Select end point</value>
     <value>
 Select back of footway point</value>
   </data>
+  <data name="Command_Prompt_SelectMidPoint" xml:space="preserve">
+    <value>
+Select intermedia point between the two blocks</value>
+  </data>
   <data name="Command_Prompt_SelectRoadString" xml:space="preserve">
     <value>
 Select road string</value>
@@ -168,6 +172,9 @@ Select start point</value>
   </data>
   <data name="Exception_NoLevelBlock" xml:space="preserve">
     <value>No level block.</value>
+  </data>
+  <data name="ExtensionApplication_UI_BtnBlockBetweenBlocks" xml:space="preserve">
+    <value>Intermediate Between Blocks</value>
   </data>
   <data name="ExtensionApplication_UI_BtnGradientBetweenBlocks" xml:space="preserve">
     <value>Gradient Block</value>

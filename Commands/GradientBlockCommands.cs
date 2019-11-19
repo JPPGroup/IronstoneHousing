@@ -49,11 +49,7 @@ namespace Jpp.Ironstone.Housing.Commands
             var xLevel = LevelBlockHelper.GetLevelFromBlock(x);
             var yLevel = LevelBlockHelper.GetLevelFromBlock(y);
 
-            if (!xLevel.HasValue || !yLevel.HasValue)
-            {
-                HousingExtensionApplication.Current.Logger.Entry(Resources.Message_No_Level_Set_On_Block);
-                return;
-            }
+            if (!xLevel.HasValue || !yLevel.HasValue) return;
 
             if (xLevel.Value.Equals(yLevel.Value))
             {
