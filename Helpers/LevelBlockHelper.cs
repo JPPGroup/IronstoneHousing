@@ -91,7 +91,8 @@ namespace Jpp.Ironstone.Housing.Helpers
 
                     var blockRef = new BlockReference(point, blockId)
                     {
-                        ScaleFactors = new Scale3d(0.2, 0.2, 0.2) //Block is annotative, scaled to match as advise by TL.
+                        ScaleFactors = new Scale3d(0.2, 0.2, 0.2), //Block is annotative, scaled to match as advise by TL.
+                        Layer = ObjectModel.Constants.FOR_REVIEW_LEVEL_LAYER
                     };
 
                     modelSpaceRecord.AppendEntity(blockRef);
