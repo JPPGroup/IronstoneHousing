@@ -95,16 +95,16 @@
     <Reference Include="Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Common.0.1.5\lib\netstandard2.0\Common.dll</HintPath>
     </Reference>
-    <Reference Include="IronstoneCore, Version=0.3.0.19, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>packages\Jpp.Ironstone.Core.0.3.0-deve\lib\net472\IronstoneCore.dll</HintPath>
+    <Reference Include="IronstoneCore, Version=0.3.0.22, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>packages\Jpp.Ironstone.Core.0.3.0-devh\lib\net472\IronstoneCore.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="IronstoneCoreUI, Version=0.3.0.19, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>packages\Jpp.Ironstone.Core.UI.0.3.0-deve\lib\net472\IronstoneCoreUI.dll</HintPath>
+    <Reference Include="IronstoneCoreUI, Version=0.3.0.22, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>packages\Jpp.Ironstone.Core.UI.0.3.0-devh\lib\net472\IronstoneCoreUI.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="IronstoneHousingObjectModel, Version=0.3.0.7, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>packages\Jpp.Ironstone.Housing.ObjectModel.0.3.0-deva\lib\net472\IronstoneHousingObjectModel.dll</HintPath>
+    <Reference Include="IronstoneHousingObjectModel, Version=0.3.0.8, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>packages\Jpp.Ironstone.Housing.ObjectModel.0.3.0-devb\lib\net472\IronstoneHousingObjectModel.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="Microsoft.ApplicationInsights, Version=2.9.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -180,10 +180,12 @@
     <None Include="Resources\level-block-large.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\gradient-large.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="IronstoneConfig.xml" />
     <Content Include="IronstoneConfigBeta.xml" />
     <Content Include="IronstoneConfigRelease.xml" />
-    <None Include="Resources\gradient-large.png" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="AutocadStyleResourceDictionary.xaml">
