@@ -1,6 +1,9 @@
 ﻿using Autodesk.AutoCAD.ApplicationServices.Core;
+using Autodesk.AutoCAD.Colors;
 using Autodesk.AutoCAD.DatabaseServices;
+using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Geometry;
+using Autodesk.AutoCAD.GraphicsInterface;
 using Autodesk.AutoCAD.Runtime;
 using Jpp.Ironstone.Core.UI.Autocad;
 using Jpp.Ironstone.Housing.Helpers;
@@ -20,7 +23,62 @@ namespace Jpp.Ironstone.Housing.Commands
         private static double _gradient; //cache of previous gradient
         private static double _invert; //cache of previous invert
         private static string _includeGradient = GradientKeywords[0]; //cache of previous gradient selection
-        
+
+        /// <summary>
+        /// Custom command to calculate a level at given point between two existing levels
+        /// </summary>
+        [CommandMethod("C_LevelBlock_BetweenLevels")]
+        public static void CalculateLevelBetweenLevels()
+        {
+            HousingExtensionApplication.Current.Logger.LogCommand(typeof(LevelBlockCommands), nameof(CalculateLevelBetweenLevels));
+            var doc = Application.DocumentManager.MdiActiveDocument;
+            var ed = doc.Editor;
+            var db = doc.Database;
+
+            using var trans = db.TransactionManager.StartTransaction();
+
+            var startBlock = LevelBlockHelper.GetPromptedBlock(Resources.Command_Prompt_SelectStartLevelBlock, ed, trans);
+            if (startBlock == null) return; //Assume user cancelled
+            
+            var startLevel = LevelBlockHelper.GetLevelFromBlock(startBlock);
+            if (!startLevel.HasValue) return;
+
+            var endBlock = LevelBlockHelper.GetPromptedBlock(Resources.Command_Prompt_SelectEndLevelBlock, ed, trans);
+            if (endBlock == null) return; //Assume user cancelled
+
+            var endLevel = LevelBlockHelper.GetLevelFromBlock(endBlock);
+            if (!endLevel.HasValue) return;
+            
+            var s = new Point3d(startBlock.Position.X, startBlock.Position.Y, 0);
+            var e = new Point3d(endBlock.Position.X, endBlock.Position.Y, 0);
+
+            using var line = new Line(s, e) { Color = Color.FromRgb(0, 255, 0) };
+            using (var tm = TransientManager.CurrentTransientManager)
+            {
+                var intCol = new IntegerCollection();
+                tm.AddTransient(line, TransientDrawingMode.Highlight, 128, intCol);
+
+                var midPoint = ed.PromptForPosition(Resources.Command_Prompt_SelectMidPoint);
+                while (midPoint.HasValue)
+                {
+                    var m = new Point3d(midPoint.Value.X, midPoint.Value.Y, 0);
+                    if (line.GetGeCurve().IsOn(m)) break;
+
+                    midPoint = ed.PromptForPosition(Resources.Command_Prompt_SelectMidPoint);
+                }
+
+                if (!midPoint.HasValue)
+                {
+                    tm.EraseTransient(line, intCol);
+                    return; //Assume user cancelled
+                }
+
+                var gradient = 1 / ((endLevel - startLevel) / line.Length);
+                GenerateBlock(startBlock.Position, midPoint.Value, startLevel.Value, gradient.Value, db);
+            }
+
+            trans.Commit();
+        }
 
         /// <summary>
         /// Custom command to calculate a level from a given point at gradient
@@ -78,11 +136,7 @@ namespace Jpp.Ironstone.Housing.Commands
             if (startBlock == null) return; //Assume user cancelled
 
             var startLevel = LevelBlockHelper.GetLevelFromBlock(startBlock);
-            if (!startLevel.HasValue) 
-            {
-                HousingExtensionApplication.Current.Logger.Entry(Resources.Message_No_Level_Set_On_Block);
-                return;
-            }
+            if (!startLevel.HasValue) return;
 
             var startPoint = startBlock.Position;
 
@@ -94,7 +148,7 @@ namespace Jpp.Ironstone.Housing.Commands
 
             var endBlock = GenerateBlock(startPoint, endPoint.Value, startLevel.Value, gradient.Value, db);
 
-            if (IncludeGradient()) GradientBlockCommands.GenerateGradientBlock(db, startBlock, endBlock);
+            if (ShouldIncludeGradient(ed)) GradientBlockCommands.GenerateGradientBlock(db, startBlock, endBlock);
 
             _gradient = gradient.Value;
 
@@ -121,11 +175,7 @@ namespace Jpp.Ironstone.Housing.Commands
             if (startBlock == null) return; //Assume user cancelled
 
             var startLevel = LevelBlockHelper.GetLevelFromBlock(startBlock);
-            if (!startLevel.HasValue)
-            {
-                HousingExtensionApplication.Current.Logger.Entry(Resources.Message_No_Level_Set_On_Block);
-                return;
-            }
+            if (!startLevel.HasValue) return;
 
             var invert = ed.PromptForDouble(Resources.Command_Prompt_EnterInvert, _invert);
             if (!invert.HasValue) return; //Assume user cancelled
@@ -137,7 +187,7 @@ namespace Jpp.Ironstone.Housing.Commands
 
             var endBlock = LevelBlockHelper.NewLevelBlockAtPoint(db, endPoint.Value, endLevel);
 
-            if (IncludeGradient()) GradientBlockCommands.GenerateGradientBlock(db, startBlock, endBlock);
+            if (ShouldIncludeGradient(ed)) GradientBlockCommands.GenerateGradientBlock(db, startBlock, endBlock);
 
             _invert = invert.Value;
 
@@ -155,11 +205,9 @@ namespace Jpp.Ironstone.Housing.Commands
             }
         }
 
-        private static bool IncludeGradient()
+        private static bool ShouldIncludeGradient(Editor ed)
         {
-            var ed = Application.DocumentManager.MdiActiveDocument.Editor;
             var result = ed.PromptForKeywords(Resources.Command_Prompt_IncludeGradientBlock, GradientKeywords, _includeGradient);
-            
             _includeGradient = result;
 
             return result == GradientKeywords[1];

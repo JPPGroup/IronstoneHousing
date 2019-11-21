@@ -150,6 +150,16 @@ namespace Jpp.Ironstone.Housing.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to 
+        ///Select intermedia point between the two blocks.
+        /// </summary>
+        internal static string Command_Prompt_SelectMidPoint {
+            get {
+                return ResourceManager.GetString("Command_Prompt_SelectMidPoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
         ///Select road string.
         /// </summary>
         internal static string Command_Prompt_SelectRoadString {
@@ -193,6 +203,15 @@ namespace Jpp.Ironstone.Housing.Properties {
         internal static string Exception_NoLevelBlock {
             get {
                 return ResourceManager.GetString("Exception_NoLevelBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Intermediate Between Blocks.
+        /// </summary>
+        internal static string ExtensionApplication_UI_BtnBlockBetweenBlocks {
+            get {
+                return ResourceManager.GetString("ExtensionApplication_UI_BtnBlockBetweenBlocks", resourceCulture);
             }
         }
         

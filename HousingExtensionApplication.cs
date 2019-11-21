@@ -6,7 +6,7 @@ using Jpp.Ironstone.Core.UI;
 using Jpp.Ironstone.Housing;
 using Jpp.Ironstone.Housing.Commands;
 using Jpp.Ironstone.Housing.Properties;
-using System.Windows.Controls;
+using System.Drawing;
 using Unity;
 
 [assembly: ExtensionApplication(typeof(HousingExtensionApplication))]
@@ -22,32 +22,38 @@ namespace Jpp.Ironstone.Housing
             var cmdBlockFromPointAtGradient = UIHelper.GetCommandGlobalName(typeof(LevelBlockCommands), nameof(LevelBlockCommands.CalculateLevelFromPointAtGradient));
             var cmdBlockFromBlockAtGradient = UIHelper.GetCommandGlobalName(typeof(LevelBlockCommands), nameof(LevelBlockCommands.CalculateLevelFromLevelBlockAtGradient));
             var cmdBlockFromBlockWithInvert = UIHelper.GetCommandGlobalName(typeof(LevelBlockCommands), nameof(LevelBlockCommands.CalculateLevelFromLevelBlockWithInvert));
+            var cmdBlockBetweenBlocks = UIHelper.GetCommandGlobalName(typeof(LevelBlockCommands), nameof(LevelBlockCommands.CalculateLevelBetweenLevels));
             var cmdGradientBetweenBlocks = UIHelper.GetCommandGlobalName(typeof(GradientBlockCommands), nameof(GradientBlockCommands.CalculateGradientBetweenLevels));
 
             var btnBlockFromPointAtGradient = UIHelper.CreateButton(Resources.ExtensionApplication_UI_BtnLevelBlockFromPointAtGradient, Resources.level_block_small, RibbonItemSize.Standard, cmdBlockFromPointAtGradient);
             var btnBlockFromBlockAtGradient = UIHelper.CreateButton(Resources.ExtensionApplication_UI_BtnLevelBlockFromBlockAtGradient, Resources.level_block_small, RibbonItemSize.Standard, cmdBlockFromBlockAtGradient);
+            var btnBlockBetweenBlocks = UIHelper.CreateButton(Resources.ExtensionApplication_UI_BtnBlockBetweenBlocks, Resources.level_block_small, RibbonItemSize.Standard, cmdBlockBetweenBlocks);
             var btnBlockFromBlockWithInvert = UIHelper.CreateButton(Resources.ExtensionApplication_UI_BtnLevelBlockFromBlockWithInvert, Resources.level_block_small, RibbonItemSize.Standard, cmdBlockFromBlockWithInvert);
 
-            var btnGradientBetweenBlocks = UIHelper.CreateButton(Resources.ExtensionApplication_UI_BtnGradientBetweenBlocks, Resources.gradient_large, RibbonItemSize.Large, cmdGradientBetweenBlocks);
+            var btnGradientBetweenBlocks = UIHelper.CreateButton(Resources.ExtensionApplication_UI_BtnGradientBetweenBlocks, Resources.gradient_large, RibbonItemSize.Standard, cmdGradientBetweenBlocks);
 
             var btnSplitLevel = new RibbonSplitButton
             {
                 ShowText = true,
-                IsSplit = false,
-                Size = RibbonItemSize.Large,
-                LargeImage = UIHelper.LoadImage(Resources.level_block_large),
+                IsSynchronizedWithCurrentItem = false,
                 Text = Resources.ExtensionApplication_UI_BtnLevelBlocks,
-                Orientation = Orientation.Vertical,
-                IsSynchronizedWithCurrentItem = false
+                Image = UIHelper.LoadImage(new Bitmap(Resources.level_block_large, new Size(16, 16))),
+                IsSplit = false
             };
 
             btnSplitLevel.Items.Add(btnBlockFromPointAtGradient);
             btnSplitLevel.Items.Add(btnBlockFromBlockAtGradient);
             btnSplitLevel.Items.Add(btnBlockFromBlockWithInvert);
+            btnSplitLevel.Items.Add(btnBlockBetweenBlocks);
 
             var source = new RibbonPanelSource { Title = Resources.ExtensionApplication_UI_PanelTitle };
-            source.Items.Add(btnSplitLevel);
-            source.Items.Add(btnGradientBetweenBlocks);
+            var column = new RibbonRowPanel { IsTopJustified = true };
+
+            column.Items.Add(btnSplitLevel);
+            column.Items.Add(new RibbonRowBreak());
+            column.Items.Add(btnGradientBetweenBlocks);
+
+            source.Items.Add(column);
 
             var panel = new RibbonPanel { Source = source };
             var ribbon = ComponentManager.Ribbon;
