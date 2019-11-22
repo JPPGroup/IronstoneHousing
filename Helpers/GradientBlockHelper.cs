@@ -49,7 +49,8 @@ namespace Jpp.Ironstone.Housing.Helpers
                     var blockRef = new BlockReference(point, blockId)
                     {
                         ScaleFactors = new Scale3d(0.2, 0.2, 0.2),
-                        Rotation = flip ? rotation + Math.PI : rotation
+                        Rotation = flip ? rotation + Math.PI : rotation,
+                        Layer = ObjectModel.Constants.FOR_REVIEW_GRADIENT_LAYER
                     };
 
                     modelSpaceRecord.AppendEntity(blockRef);
