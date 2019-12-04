@@ -183,7 +183,7 @@ namespace Jpp.Ironstone.Housing.Commands
             var endPoint = ed.PromptForPosition(Resources.Command_Prompt_SelectEndPoint);
             if (!endPoint.HasValue) return; //Assume user cancelled
 
-            var endLevel = startLevel.Value - (invert.Value / 1000);
+            var endLevel = startLevel.Value - invert.Value;
 
             var endBlock = LevelBlockHelper.NewLevelBlockAtPoint(db, endPoint.Value, endLevel);
 

@@ -82,7 +82,7 @@ namespace Jpp.Ironstone.Housing.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to 
-        ///Enter a invert (mm).
+        ///Enter a invert (m).
         /// </summary>
         internal static string Command_Prompt_EnterInvert {
             get {
