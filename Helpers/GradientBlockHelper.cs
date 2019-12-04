@@ -17,8 +17,6 @@ namespace Jpp.Ironstone.Housing.Helpers
 
         public static void GenerateBlock(Database database, BlockReference x, BlockReference y)
         {
-            if (!HasGradientBlock(database)) throw new ArgumentException(Resources.Exception_NoGradientBlock);
-
             var xLevel = LevelBlockHelper.GetLevelFromBlock(x);
             var yLevel = LevelBlockHelper.GetLevelFromBlock(y);
 
@@ -59,25 +57,8 @@ namespace Jpp.Ironstone.Housing.Helpers
             var rotation = vector.Angle;
 
             NewGradientBlockAtPoint(database, new Point3d(plane, midPoint), gradient, rotation);
-        }
 
-        private static bool HasGradientBlock(Database database)
-        {
-            using var trans = database.TransactionManager.TopTransaction;
-            var bt = (BlockTable)trans.GetObject(database.BlockTableId, OpenMode.ForRead);
-            var hasBlock = false;
-
-            foreach (var btrId in bt)
-            {
-                var btr = (BlockTableRecord)trans.GetObject(btrId, OpenMode.ForRead);
-                if (string.Equals(btr.Name, GRADIENT_BLOCK_NAME, StringComparison.CurrentCultureIgnoreCase))
-                {
-                    hasBlock = true;
-                    break;
-                }
-            }
-
-            return hasBlock;
+            HousingExtensionApplication.Current.Logger.Entry(string.Format(Resources.Command_Output_GradientLineLength, Math.Round(vector.Length, 3)));
         }
 
         private static void NewGradientBlockAtPoint(Database database, Point3d point, double gradient, double rotation)
@@ -143,6 +124,8 @@ namespace Jpp.Ironstone.Housing.Helpers
                     return;
                 }
             }
+
+            throw new ArgumentException(Resources.Exception_NoGradientBlock);
         }
     }
 }
