@@ -1,5 +1,6 @@
 ﻿using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
+using Jpp.Ironstone.Housing.Properties;
 using System;
 
 namespace Jpp.Ironstone.Housing.Helpers
@@ -14,7 +15,53 @@ namespace Jpp.Ironstone.Housing.Helpers
         private const string GRADIENT_ATTRIBUTE_NAME = "GRADIENT";
         private const string FLIP_ATTRIBUTE_NAME = "Flip state1";
 
-        public static bool HasGradientBlock(Database database)
+        public static void GenerateBlock(Database database, BlockReference x, BlockReference y)
+        {
+            if (!HasGradientBlock(database)) throw new ArgumentException(Resources.Exception_NoGradientBlock);
+
+            var xLevel = LevelBlockHelper.GetLevelFromBlock(x);
+            var yLevel = LevelBlockHelper.GetLevelFromBlock(y);
+
+            if (!xLevel.HasValue || !yLevel.HasValue) return;
+
+            if (xLevel.Value.Equals(yLevel.Value))
+            {
+                HousingExtensionApplication.Current.Logger.Entry(Resources.Message_Levels_Are_Equal);
+                return;
+            }
+
+            Point2d startPoint;
+            Point2d endPoint;
+            double startLevel;
+            double endLevel;
+
+            var plane = new Plane(Point3d.Origin, Vector3d.ZAxis);
+
+            //Always point downhill
+            if (xLevel.Value > yLevel.Value)
+            {
+                startPoint = x.Position.Convert2d(plane);
+                startLevel = xLevel.Value;
+                endPoint = y.Position.Convert2d(plane);
+                endLevel = yLevel.Value;
+            }
+            else
+            {
+                startPoint = y.Position.Convert2d(plane);
+                startLevel = yLevel.Value;
+                endPoint = x.Position.Convert2d(plane);
+                endLevel = xLevel.Value;
+            }
+
+            var vector = endPoint.GetAsVector() - startPoint.GetAsVector();
+            var gradient = 1 / ((startLevel - endLevel) / vector.Length);
+            var midPoint = startPoint + vector * 0.5;
+            var rotation = vector.Angle;
+
+            NewGradientBlockAtPoint(database, new Point3d(plane, midPoint), gradient, rotation);
+        }
+
+        private static bool HasGradientBlock(Database database)
         {
             using var trans = database.TransactionManager.TopTransaction;
             var bt = (BlockTable)trans.GetObject(database.BlockTableId, OpenMode.ForRead);
@@ -33,7 +80,7 @@ namespace Jpp.Ironstone.Housing.Helpers
             return hasBlock;
         }
 
-        public static void NewGradientBlockAtPoint(Database database, Point3d point, double gradient, double rotation)
+        private static void NewGradientBlockAtPoint(Database database, Point3d point, double gradient, double rotation)
         {
             var flip = rotation > Math.PI / 2 && rotation < Math.PI * 1.5;
             using var trans = database.TransactionManager.TopTransaction;
