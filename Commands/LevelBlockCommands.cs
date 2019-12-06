@@ -148,7 +148,7 @@ namespace Jpp.Ironstone.Housing.Commands
 
             var endBlock = GenerateBlock(startPoint, endPoint.Value, startLevel.Value, gradient.Value, db);
 
-            if (ShouldIncludeGradient(ed)) GradientBlockCommands.GenerateGradientBlock(db, startBlock, endBlock);
+            if (ShouldIncludeGradient(ed)) GradientBlockHelper.GenerateBlock(db, startBlock, endBlock);
 
             _gradient = gradient.Value;
 
@@ -187,7 +187,7 @@ namespace Jpp.Ironstone.Housing.Commands
 
             var endBlock = LevelBlockHelper.NewLevelBlockAtPoint(db, endPoint.Value, endLevel);
 
-            if (ShouldIncludeGradient(ed)) GradientBlockCommands.GenerateGradientBlock(db, startBlock, endBlock);
+            if (ShouldIncludeGradient(ed)) GradientBlockHelper.GenerateBlock(db, startBlock, endBlock);
 
             _invert = invert.Value;
 
