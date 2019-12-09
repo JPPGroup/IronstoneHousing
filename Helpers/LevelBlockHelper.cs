@@ -77,6 +77,30 @@ namespace Jpp.Ironstone.Housing.Helpers
             return level;
         }
 
+        public static BlockReference UpdateExistingLevelBlock(BlockReference block, double level)
+        {
+            //Update level value, but not adjust any other properties.
+            var trans = block.Database.TransactionManager.TopTransaction;
+
+            foreach (ObjectId attObjId in block.AttributeCollection)
+            {
+                var attDbObj = trans.GetObject(attObjId, OpenMode.ForRead);
+                if (attDbObj is AttributeReference attRef)
+                {
+                    if (string.Equals(attRef.Tag, LEVEL_ATTRIBUTE_NAME, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        attRef.UpgradeOpen();
+
+                        attRef.TextString = $"{level:0.000}";
+                        return block;
+                    }
+                }
+            }
+
+            HousingExtensionApplication.Current.Logger.Entry(Resources.Message_Invalid_Level_Block_Selected, Severity.Warning);
+            return null;
+        }
+
         public static BlockReference NewLevelBlockAtPoint(Database database, Point3d point, double level, double? rotation = null)
         {
             var trans = database.TransactionManager.TopTransaction;
