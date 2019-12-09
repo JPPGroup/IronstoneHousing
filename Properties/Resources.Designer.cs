@@ -370,6 +370,16 @@ namespace Jpp.Ironstone.Housing.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to 
+        ///Level block already selected..
+        /// </summary>
+        internal static string Message_Block_Already_Selected {
+            get {
+                return ResourceManager.GetString("Message_Block_Already_Selected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
         ///Invalid level block selected..
         /// </summary>
         internal static string Message_Invalid_Level_Block_Selected {

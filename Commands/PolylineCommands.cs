@@ -3,11 +3,12 @@ using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Geometry;
 using Autodesk.AutoCAD.Runtime;
-using Jpp.Ironstone.Core.UI.Autocad;
+using Jpp.Ironstone.Core.ServiceInterfaces;
 using Jpp.Ironstone.Housing.Helpers;
 using Jpp.Ironstone.Housing.Properties;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Jpp.Ironstone.Housing.Commands
 {
@@ -16,7 +17,7 @@ namespace Jpp.Ironstone.Housing.Commands
     /// </summary>
     public static class PolylineCommands
     {
-        private static readonly string[] ContinueKeywords = { "Yes", "No" };
+        private static readonly string[] PolylineOptions = { "Close", "Open" };
 
         /// <summary>
         /// Custom command to generate 3d polyline from level blocks
@@ -41,21 +42,52 @@ namespace Jpp.Ironstone.Housing.Commands
             };
 
             var nextLevel = true;
+            PromptEntityResult result = null;
             while (nextLevel)
             {
-                var nextBlock = LevelBlockHelper.GetPromptedBlock(Resources.Command_Prompt_SelectNextBlock, ed, trans);
-                if (nextBlock == null) return; // Assume user cancelled prompt
+                nextLevel = false;
 
-                points.Add(GetPoint3dFromBlock(nextBlock));
-                nextLevel = ShouldContinue(ed);
+                var options = new PromptEntityOptions(Resources.Command_Prompt_SelectNextBlock);
+                options.SetRejectMessage(Resources.Command_Prompt_RejectBlockReference);
+                options.AddAllowedClass(typeof(BlockReference), true);
+                options.AppendKeywordsToMessage = true;
+
+                foreach (var keyword in PolylineOptions) options.Keywords.Add(keyword);
+
+                result = ed.GetEntity(options);
+
+                if (result.Status == PromptStatus.OK)
+                { 
+                    var block = LevelBlockHelper.GetBlockReference(result.ObjectId, trans);
+                    if (block == null)
+                    {
+                        HousingExtensionApplication.Current.Logger.Entry(Resources.Message_Invalid_Level_Block_Selected, Severity.Warning);
+                        return;
+                    }
+
+                    var point = GetPoint3dFromBlock(block);
+                    if (points.Any(p => p.Y.Equals(point.Y) && p.X.Equals(point.X) && p.Z.Equals(point.Z)))
+                    {
+                        HousingExtensionApplication.Current.Logger.Entry(Resources.Message_Block_Already_Selected, Severity.Information);
+                    }
+                    else
+                    {
+                        points.Add(GetPoint3dFromBlock(block));
+                    }
+
+                    nextLevel = true;
+                }
             }
 
-            CreatePolyline3dFromPoints(db, points);
+            var close = false;
+            if (result.Status == PromptStatus.Keyword) close = result.StringResult == PolylineOptions[0];
+
+            CreatePolyline3dFromPoints(db, points, close);
 
             trans.Commit();
         }
 
-        private static void CreatePolyline3dFromPoints(Database db, IEnumerable<Point3d> points)
+        private static void CreatePolyline3dFromPoints(Database db, IEnumerable<Point3d> points, bool shouldClose)
         {
             var trans = db.TransactionManager.TopTransaction;
 
@@ -74,6 +106,8 @@ namespace Jpp.Ironstone.Housing.Commands
                     poly3d.AppendVertex(poly3dVertex);
                 }
             }
+
+            poly3d.Closed = shouldClose;
         }
 
         private static Point3d GetPoint3dFromBlock(BlockReference block)
@@ -84,12 +118,6 @@ namespace Jpp.Ironstone.Housing.Commands
             var ex = new ArgumentNullException(nameof(level));
             HousingExtensionApplication.Current.Logger.LogException(ex);
             throw ex;
-        }
-
-        private static bool ShouldContinue(Editor ed)
-        {
-            var result = ed.PromptForKeywords(Resources.Command_Prompt_IncludeGradientBlock, ContinueKeywords);
-            return result == ContinueKeywords[0];
         }
     }
 }

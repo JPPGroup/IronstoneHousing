@@ -48,7 +48,7 @@ namespace Jpp.Ironstone.Housing.Helpers
             return null;
         }
 
-        private static BlockReference GetBlockReference(ObjectId objectId, Transaction transaction)
+        public static BlockReference GetBlockReference(ObjectId objectId, Transaction transaction)
         {
             var block = transaction.GetObject(objectId, OpenMode.ForRead) as BlockReference;
             return string.Equals(block?.Name, LEVEL_BLOCK_NAME, StringComparison.CurrentCultureIgnoreCase) ? block : null;
