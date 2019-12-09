@@ -36,9 +36,9 @@ namespace Jpp.Ironstone.Housing.Helpers
             return hasLevelBlock;
         }
 
-        public static BlockReference GetPromptedBlock(string promptTest, Editor ed, Transaction trans)
+        public static BlockReference GetPromptedBlock(string prompt, Editor ed, Transaction trans)
         {
-            var objectId = ed.PromptForEntity(promptTest, typeof(BlockReference), Resources.Command_Prompt_RejectBlockReference, true);
+            var objectId = ed.PromptForEntity(prompt, typeof(BlockReference), Resources.Command_Prompt_RejectBlockReference, true);
             if (!objectId.HasValue) return null;
 
             var block = GetBlockReference(objectId.Value, trans);

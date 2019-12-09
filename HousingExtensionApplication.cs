@@ -24,6 +24,7 @@ namespace Jpp.Ironstone.Housing
             var cmdBlockFromBlockWithInvert = UIHelper.GetCommandGlobalName(typeof(LevelBlockCommands), nameof(LevelBlockCommands.CalculateLevelFromLevelBlockWithInvert));
             var cmdBlockBetweenBlocks = UIHelper.GetCommandGlobalName(typeof(LevelBlockCommands), nameof(LevelBlockCommands.CalculateLevelBetweenLevels));
             var cmdGradientBetweenBlocks = UIHelper.GetCommandGlobalName(typeof(GradientBlockCommands), nameof(GradientBlockCommands.CalculateGradientBetweenLevels));
+            var cmdPolylineFromLevelBlocks = UIHelper.GetCommandGlobalName(typeof(PolylineCommands), nameof(PolylineCommands.GeneratePolyline3dFromLevels));
 
             var btnBlockFromPointAtGradient = UIHelper.CreateButton(Resources.ExtensionApplication_UI_BtnLevelBlockFromPointAtGradient, Resources.level_block_small, RibbonItemSize.Standard, cmdBlockFromPointAtGradient);
             var btnBlockFromBlockAtGradient = UIHelper.CreateButton(Resources.ExtensionApplication_UI_BtnLevelBlockFromBlockAtGradient, Resources.level_block_small, RibbonItemSize.Standard, cmdBlockFromBlockAtGradient);
@@ -31,6 +32,7 @@ namespace Jpp.Ironstone.Housing
             var btnBlockFromBlockWithInvert = UIHelper.CreateButton(Resources.ExtensionApplication_UI_BtnLevelBlockFromBlockWithInvert, Resources.level_block_small, RibbonItemSize.Standard, cmdBlockFromBlockWithInvert);
 
             var btnGradientBetweenBlocks = UIHelper.CreateButton(Resources.ExtensionApplication_UI_BtnGradientBetweenBlocks, Resources.gradient_large, RibbonItemSize.Standard, cmdGradientBetweenBlocks);
+            var btnPolylineFromLevelBlocks = UIHelper.CreateButton(Resources.ExtensionApplication_UI_BtnPolylineFromLevelBlocks, Resources.line_from_levels_small, RibbonItemSize.Standard, cmdPolylineFromLevelBlocks);
 
             var btnSplitLevel = new RibbonSplitButton
             {
@@ -52,6 +54,8 @@ namespace Jpp.Ironstone.Housing
             column.Items.Add(btnSplitLevel);
             column.Items.Add(new RibbonRowBreak());
             column.Items.Add(btnGradientBetweenBlocks);
+            column.Items.Add(new RibbonRowBreak());
+            column.Items.Add(btnPolylineFromLevelBlocks);
 
             source.Items.Add(column);
 
