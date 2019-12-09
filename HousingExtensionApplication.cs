@@ -1,4 +1,9 @@
-﻿using Autodesk.AutoCAD.Runtime;
+﻿// <copyright file="HousingExtensionApplication.cs" company="JPP Consulting">
+// Copyright (c) JPP Consulting. All rights reserved.
+// </copyright>
+
+using System.Drawing;
+using Autodesk.AutoCAD.Runtime;
 using Autodesk.Windows;
 using Jpp.Ironstone.Core;
 using Jpp.Ironstone.Core.ServiceInterfaces;
@@ -6,17 +11,28 @@ using Jpp.Ironstone.Core.UI;
 using Jpp.Ironstone.Housing;
 using Jpp.Ironstone.Housing.Commands;
 using Jpp.Ironstone.Housing.Properties;
-using System.Drawing;
 using Unity;
 
 [assembly: ExtensionApplication(typeof(HousingExtensionApplication))]
+
 namespace Jpp.Ironstone.Housing
 {
+    /// <summary>
+    /// Application extension for housing module.
+    /// </summary>
     public class HousingExtensionApplication : IIronstoneExtensionApplication
     {
-        public ILogger Logger { get; set; }
+        /// <summary>
+        /// Gets current instance of housing module.
+        /// </summary>
         public static HousingExtensionApplication Current { get; private set; }
 
+        /// <summary>
+        /// Gets or sets logger instances.
+        /// </summary>
+        public ILogger Logger { get; set; }
+
+        /// <inheritdoc/>
         public void CreateUI()
         {
             var cmdBlockFromPointAtGradient = UIHelper.GetCommandGlobalName(typeof(LevelBlockCommands), nameof(LevelBlockCommands.CalculateLevelFromPointAtGradient));
@@ -40,7 +56,7 @@ namespace Jpp.Ironstone.Housing
                 IsSynchronizedWithCurrentItem = false,
                 Text = Resources.ExtensionApplication_UI_BtnLevelBlocks,
                 Image = UIHelper.LoadImage(new Bitmap(Resources.level_block_large, new Size(16, 16))),
-                IsSplit = false
+                IsSplit = false,
             };
 
             btnSplitLevel.Items.Add(btnBlockFromPointAtGradient);
@@ -65,17 +81,22 @@ namespace Jpp.Ironstone.Housing
             tab.Panels.Add(panel);
         }
 
+        /// <inheritdoc/>
         public void Initialize()
         {
             Current = this;
             CoreExtensionApplication._current.RegisterExtension(this);
         }
 
+        /// <inheritdoc/>
         public void InjectContainer(IUnityContainer container)
         {
-            Logger = container.Resolve<ILogger>();
+            this.Logger = container.Resolve<ILogger>();
         }
 
-        public void Terminate() { }
+        /// <inheritdoc/>
+        public void Terminate()
+        {
+        }
     }
 }

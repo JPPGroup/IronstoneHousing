@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="AssemblyInfo.cs" company="JPP Consulting">
+// Copyright (c) JPP Consulting. All rights reserved.
+// </copyright>
+
+using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 

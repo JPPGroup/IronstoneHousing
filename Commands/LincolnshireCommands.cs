@@ -1,22 +1,26 @@
-﻿using Autodesk.AutoCAD.ApplicationServices.Core;
-using Autodesk.AutoCAD.DatabaseServices;
-using Autodesk.AutoCAD.EditorInput;
-using Autodesk.AutoCAD.Geometry;
-using Autodesk.AutoCAD.Runtime;
-using Jpp.Ironstone.Core.UI.Autocad;
-using Jpp.Ironstone.Housing.Helpers;
-using Jpp.Ironstone.Housing.Properties;
-using System;
+﻿// <copyright file="LincolnshireCommands.cs" company="JPP Consulting">
+// Copyright (c) JPP Consulting. All rights reserved.
+// </copyright>
 
 namespace Jpp.Ironstone.Housing.Commands
 {
+    using System;
+    using Autodesk.AutoCAD.ApplicationServices.Core;
+    using Autodesk.AutoCAD.DatabaseServices;
+    using Autodesk.AutoCAD.EditorInput;
+    using Autodesk.AutoCAD.Geometry;
+    using Autodesk.AutoCAD.Runtime;
+    using Jpp.Ironstone.Core.UI.Autocad;
+    using Jpp.Ironstone.Housing.Helpers;
+    using Jpp.Ironstone.Housing.Properties;
+
     /// <summary>
-    /// Commands for use with Lincolnshire only
+    /// Commands for use with Lincolnshire only.
     /// </summary>
     public static class LincolnshireCommands
     {
         /// <summary>
-        /// Custom command for Lincolnshire to add 0.177mm to carriageway level for back of footway
+        /// Custom command for Lincolnshire to add 0.177mm to carriageway level for back of footway.
         /// </summary>
         [CommandMethod("C_Lincolnshire_BackOfFootwayLevel_177")]
         public static void AddBackOfFootwayLevel177()
@@ -26,7 +30,7 @@ namespace Jpp.Ironstone.Housing.Commands
         }
 
         /// <summary>
-        /// Custom command for Lincolnshire to add 0.105mm to carriageway level for back of footway
+        /// Custom command for Lincolnshire to add 0.105mm to carriageway level for back of footway.
         /// </summary>
         [CommandMethod("C_Lincolnshire_BackOfFootwayLevel_105")]
         public static void AddBackOfFootwayLevel105()
@@ -43,10 +47,13 @@ namespace Jpp.Ironstone.Housing.Commands
 
             using var trans = db.TransactionManager.StartTransaction();
 
-            if (!LevelBlockHelper.HasLevelBlock(db)) throw new ArgumentException(Resources.Exception_NoLevelBlock);
+            if (!LevelBlockHelper.HasLevelBlock(db))
+            {
+                throw new ArgumentException(Resources.Exception_NoLevelBlock);
+            }
 
             var roadString = SelectRoadString(db, ed);
-            if (roadString == null) 
+            if (roadString == null)
             {
                 HousingExtensionApplication.Current.Logger.Entry(Resources.Message_No_Road_String_Selected);
                 return;
@@ -73,8 +80,11 @@ namespace Jpp.Ironstone.Housing.Commands
 
         private static Polyline3d SelectRoadString(Database database, Editor editor)
         {
-            var objectId = editor.PromptForEntity(Resources.Command_Prompt_SelectRoadString, typeof(Polyline3d),Resources.Command_Prompt_Reject3dPolyline, true);
-            if (!objectId.HasValue) return null;
+            var objectId = editor.PromptForEntity(Resources.Command_Prompt_SelectRoadString, typeof(Polyline3d), Resources.Command_Prompt_Reject3dPolyline, true);
+            if (!objectId.HasValue)
+            {
+                return null;
+            }
 
             var trans = database.TransactionManager.TopTransaction;
             return trans.GetObject(objectId.Value, OpenMode.ForRead) as Polyline3d;
