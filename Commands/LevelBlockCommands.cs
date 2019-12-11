@@ -3,7 +3,6 @@ using Autodesk.AutoCAD.Colors;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Geometry;
-using Autodesk.AutoCAD.GraphicsInterface;
 using Autodesk.AutoCAD.Runtime;
 using Jpp.Ironstone.Core.UI.Autocad;
 using Jpp.Ironstone.Housing.Helpers;
@@ -53,13 +52,19 @@ namespace Jpp.Ironstone.Housing.Commands
             var s = new Point3d(startBlock.Position.X, startBlock.Position.Y, 0);
             var e = new Point3d(endBlock.Position.X, endBlock.Position.Y, 0);
 
-            using var line = new Line(s, e) { Color = Color.FromRgb(0, 255, 0) };
-            using (var tm = TransientManager.CurrentTransientManager)
-            {
-                var intCol = new IntegerCollection();
-                tm.AddTransient(line, TransientDrawingMode.Highlight, 128, intCol);
+            Point3d? midPoint;
 
-                var midPoint = ed.PromptForPosition(Resources.Command_Prompt_SelectMidPoint);
+            using var line = new Line(s, e) { Color = Color.FromRgb(0, 255, 0) };
+            using (var transForLine = db.TransactionManager.StartTransaction())
+            {
+                var acBlkTbl = (BlockTable) transForLine.GetObject(db.BlockTableId, OpenMode.ForRead);
+                var acBlkTblRec = (BlockTableRecord) transForLine.GetObject(acBlkTbl[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
+                acBlkTblRec.AppendEntity(line);
+                transForLine.AddNewlyCreatedDBObject(line, true);
+
+                db.TransactionManager.QueueForGraphicsFlush();
+
+                midPoint = ed.PromptForPosition(Resources.Command_Prompt_SelectMidPoint);
                 while (midPoint.HasValue)
                 {
                     var m = new Point3d(midPoint.Value.X, midPoint.Value.Y, 0);
@@ -68,17 +73,19 @@ namespace Jpp.Ironstone.Housing.Commands
                     midPoint = ed.PromptForPosition(Resources.Command_Prompt_SelectMidPoint);
                 }
 
-                if (!midPoint.HasValue)
-                {
-                    tm.EraseTransient(line, intCol);
-                    return; //Assume user cancelled
-                }
-
-                var gradient = 1 / ((endLevel.Value - startLevel.Value) / line.Length);
-                var midLevel = CalculateLevel(startBlock.Position, midPoint.Value, startLevel.Value, gradient);
-
-                LevelBlockHelper.NewLevelBlockAtPoint(db, midPoint.Value, midLevel, startBlock.Rotation);
+                transForLine.Abort();
+                db.TransactionManager.QueueForGraphicsFlush();
             }
+
+            if (!midPoint.HasValue)
+            {
+                return; //Assume user cancelled
+            }
+
+            var gradient = 1 / ((endLevel.Value - startLevel.Value) / line.Length);
+            var midLevel = CalculateLevel(startBlock.Position, midPoint.Value, startLevel.Value, gradient);
+
+            LevelBlockHelper.NewLevelBlockAtPoint(db, midPoint.Value, midLevel, startBlock.Rotation);
 
             trans.Commit();
         }
