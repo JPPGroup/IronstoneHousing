@@ -127,7 +127,7 @@ Enter a gradient (1 in)</value>
   </data>
   <data name="Command_Prompt_EnterInvert" xml:space="preserve">
     <value>
-Enter a invert (mm)</value>
+Enter a invert (m)</value>
   </data>
   <data name="Command_Prompt_EnterLevel" xml:space="preserve">
     <value>
