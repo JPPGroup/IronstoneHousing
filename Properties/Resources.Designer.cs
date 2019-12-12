@@ -62,6 +62,16 @@ namespace Jpp.Ironstone.Housing.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to 
+        ///Calculated line length between blocks: {0}.
+        /// </summary>
+        internal static string Command_Output_GradientLineLength {
+            get {
+                return ResourceManager.GetString("Command_Output_GradientLineLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
         ///Enter a gradient (1 in).
         /// </summary>
         internal static string Command_Prompt_EnterGradient {

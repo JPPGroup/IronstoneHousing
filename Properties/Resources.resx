@@ -117,6 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Command_Output_GradientLineLength" xml:space="preserve">
+    <value>
+Calculated line length between blocks: {0}</value>
+  </data>
   <data name="Command_Prompt_EnterGradient" xml:space="preserve">
     <value>
 Enter a gradient (1 in)</value>
