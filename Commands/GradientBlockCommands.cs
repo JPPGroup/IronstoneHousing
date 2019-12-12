@@ -1,7 +1,5 @@
 ﻿using Autodesk.AutoCAD.ApplicationServices.Core;
-using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Runtime;
-using Jpp.Ironstone.Core.UI.Autocad;
 using Jpp.Ironstone.Housing.Helpers;
 using Jpp.Ironstone.Housing.Properties;
 
@@ -25,10 +23,7 @@ namespace Jpp.Ironstone.Housing.Commands
             var db = doc.Database;
 
             using var trans = db.TransactionManager.StartTransaction();
-
-            var startObjectId = ed.PromptForEntity(Resources.Command_Prompt_SelectStartLevelBlock, typeof(BlockReference), Resources.Command_Prompt_RejectBlockReference, true);
-            if (!startObjectId.HasValue) return; //Assume user cancelled
-
+            
             var startBlock = LevelBlockHelper.GetPromptedBlock(Resources.Command_Prompt_SelectStartLevelBlock, ed, trans);
             if (startBlock == null) return; //Assume user cancelled
 
@@ -39,7 +34,5 @@ namespace Jpp.Ironstone.Housing.Commands
 
             trans.Commit();
         }
-
-
     }
 }
