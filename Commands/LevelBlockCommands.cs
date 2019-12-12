@@ -74,7 +74,7 @@ namespace Jpp.Ironstone.Housing.Commands
                 }
 
                 var gradient = 1 / ((endLevel - startLevel) / line.Length);
-                GenerateBlock(startBlock.Position, midPoint.Value, startLevel.Value, gradient.Value, db);
+                GenerateBlock(startBlock.Position, midPoint.Value, startLevel.Value, gradient.Value, db, startBlock.Rotation);
             }
 
             trans.Commit();
@@ -146,7 +146,7 @@ namespace Jpp.Ironstone.Housing.Commands
             var endPoint = ed.PromptForPosition(Resources.Command_Prompt_SelectEndPoint);
             if (!endPoint.HasValue) return; //Assume user cancelled
 
-            var endBlock = GenerateBlock(startPoint, endPoint.Value, startLevel.Value, gradient.Value, db);
+            var endBlock = GenerateBlock(startPoint, endPoint.Value, startLevel.Value, gradient.Value, db, startBlock.Rotation);
 
             if (ShouldIncludeGradient(ed)) GradientBlockHelper.GenerateBlock(db, startBlock, endBlock);
 
@@ -185,7 +185,7 @@ namespace Jpp.Ironstone.Housing.Commands
 
             var endLevel = startLevel.Value - invert.Value;
 
-            var endBlock = LevelBlockHelper.NewLevelBlockAtPoint(db, endPoint.Value, endLevel);
+            var endBlock = LevelBlockHelper.NewLevelBlockAtPoint(db, endPoint.Value, endLevel, startBlock.Rotation);
 
             if (ShouldIncludeGradient(ed)) GradientBlockHelper.GenerateBlock(db, startBlock, endBlock);
 
@@ -194,14 +194,14 @@ namespace Jpp.Ironstone.Housing.Commands
             trans.Commit();
         }
 
-        private static BlockReference GenerateBlock(Point3d startPoint, Point3d endPoint, double startLevel, double gradient, Database db)
+        private static BlockReference GenerateBlock(Point3d startPoint, Point3d endPoint, double startLevel, double gradient, Database db, double? rotation = null)
         {
             var s = new Point3d(startPoint.X, startPoint.Y, 0); //Remove z for line length
             var e = new Point3d(endPoint.X, endPoint.Y, 0); //Remove z for line length
             using (var line = new Line(s, e))
             {
                 var endLevel = startLevel + line.Length * (1 / gradient);
-                return LevelBlockHelper.NewLevelBlockAtPoint(db, endPoint, endLevel);
+                return LevelBlockHelper.NewLevelBlockAtPoint(db, endPoint, endLevel, rotation);
             }
         }
 

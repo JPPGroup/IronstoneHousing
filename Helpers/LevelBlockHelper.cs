@@ -77,7 +77,7 @@ namespace Jpp.Ironstone.Housing.Helpers
             return level;
         }
 
-        public static BlockReference NewLevelBlockAtPoint(Database database, Point3d point, double level)
+        public static BlockReference NewLevelBlockAtPoint(Database database, Point3d point, double level, double? rotation = null)
         {
             var trans = database.TransactionManager.TopTransaction;
             var bt = (BlockTable)trans.GetObject(database.BlockTableId, OpenMode.ForRead);
@@ -94,6 +94,8 @@ namespace Jpp.Ironstone.Housing.Helpers
                         ScaleFactors = new Scale3d(0.2, 0.2, 0.2), //Block is annotative, scaled to match as advise by TL.
                         Layer = ObjectModel.Constants.FOR_REVIEW_LEVEL_LAYER
                     };
+                    
+                    if (rotation.HasValue) blockRef.Rotation = rotation.Value;
 
                     modelSpaceRecord.AppendEntity(blockRef);
                     trans.AddNewlyCreatedDBObject(blockRef, true);
