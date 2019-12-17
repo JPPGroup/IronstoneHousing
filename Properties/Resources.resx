@@ -137,6 +137,10 @@ Enter a level</value>
     <value>
 Include gradient</value>
   </data>
+  <data name="Command_Prompt_NewOrExistingLevelBlock" xml:space="preserve">
+    <value>
+New or Existing level block</value>
+  </data>
   <data name="Command_Prompt_Reject3dPolyline" xml:space="preserve">
     <value>Only 3d polylines allowed.</value>
   </data>
@@ -150,6 +154,10 @@ Select end level block</value>
   <data name="Command_Prompt_SelectEndPoint" xml:space="preserve">
     <value>
 Select end point</value>
+  </data>
+  <data name="Command_Prompt_SelectExistingLevelBlock" xml:space="preserve">
+    <value>
+Select existing level block</value>
   </data>
   <data name="Command_Prompt_SelectFootwayPoint" xml:space="preserve">
     <value>

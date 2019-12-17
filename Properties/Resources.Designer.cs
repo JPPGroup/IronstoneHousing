@@ -111,6 +111,16 @@ namespace Jpp.Ironstone.Housing.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 
+        ///New or Existing level block.
+        /// </summary>
+        internal static string Command_Prompt_NewOrExistingLevelBlock {
+            get {
+                return ResourceManager.GetString("Command_Prompt_NewOrExistingLevelBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Only 3d polylines allowed..
         /// </summary>
         internal static string Command_Prompt_Reject3dPolyline {
@@ -145,6 +155,16 @@ namespace Jpp.Ironstone.Housing.Properties {
         internal static string Command_Prompt_SelectEndPoint {
             get {
                 return ResourceManager.GetString("Command_Prompt_SelectEndPoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///Select existing level block.
+        /// </summary>
+        internal static string Command_Prompt_SelectExistingLevelBlock {
+            get {
+                return ResourceManager.GetString("Command_Prompt_SelectExistingLevelBlock", resourceCulture);
             }
         }
         
