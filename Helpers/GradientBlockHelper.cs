@@ -14,6 +14,7 @@ namespace Jpp.Ironstone.Housing.Helpers
         private const string GRADIENT_BLOCK_NAME = "ProposedGradient";
         private const string GRADIENT_ATTRIBUTE_NAME = "GRADIENT";
         private const string FLIP_ATTRIBUTE_NAME = "Flip state1";
+        private const double ARROW_FULL_LENGTH = 2; // Hack to move position based on a known length
 
         public static void GenerateBlock(Database database, BlockReference x, BlockReference y)
         {
@@ -32,7 +33,6 @@ namespace Jpp.Ironstone.Housing.Helpers
             Point2d endPoint;
             double startLevel;
             double endLevel;
-
             var plane = new Plane(Point3d.Origin, Vector3d.ZAxis);
 
             //Always point downhill
@@ -52,8 +52,15 @@ namespace Jpp.Ironstone.Housing.Helpers
             }
 
             var vector = endPoint.GetAsVector() - startPoint.GetAsVector();
+
             var gradient = 1 / ((startLevel - endLevel) / vector.Length);
             var midPoint = startPoint + vector * 0.5;
+
+            // Hack to move position based on a known length
+            var shiftVector = vector.GetNormal() * ARROW_FULL_LENGTH;
+            var matrix = Matrix2d.Displacement(shiftVector);
+            midPoint.TransformBy(matrix);
+
             var rotation = vector.Angle;
 
             NewGradientBlockAtPoint(database, new Point3d(plane, midPoint), gradient, rotation);
