@@ -55,14 +55,13 @@ namespace Jpp.Ironstone.Housing.Commands
             Point3d? midPoint;
 
             using var line = new Line(s, e) { Color = Color.FromRgb(0, 255, 0) };
-            using (var transForLine = db.TransactionManager.StartTransaction())
-            {
-                var acBlkTbl = (BlockTable) transForLine.GetObject(db.BlockTableId, OpenMode.ForRead);
-                var acBlkTblRec = (BlockTableRecord) transForLine.GetObject(acBlkTbl[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
+            { 
+                var acBlkTbl = (BlockTable) trans.GetObject(db.BlockTableId, OpenMode.ForRead);
+                var acBlkTblRec = (BlockTableRecord) trans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
                 acBlkTblRec.AppendEntity(line);
-                transForLine.AddNewlyCreatedDBObject(line, true);
+                trans.AddNewlyCreatedDBObject(line, true);
 
-                db.TransactionManager.QueueForGraphicsFlush();
+                db.TransactionManager.QueueForGraphicsFlush(); // TODO: Review graphics flush in core console.
 
                 midPoint = ed.PromptForPosition(Resources.Command_Prompt_SelectMidPoint);
                 while (midPoint.HasValue)
@@ -73,8 +72,8 @@ namespace Jpp.Ironstone.Housing.Commands
                     midPoint = ed.PromptForPosition(Resources.Command_Prompt_SelectMidPoint);
                 }
 
-                transForLine.Abort();
-                db.TransactionManager.QueueForGraphicsFlush();
+                line.Erase();
+                db.TransactionManager.QueueForGraphicsFlush(); // TODO: Review graphics flush in core console.
             }
 
             if (!midPoint.HasValue)
