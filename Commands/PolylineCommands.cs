@@ -36,24 +36,24 @@ namespace Jpp.Ironstone.Housing.Commands
             var initialBlock = LevelBlockHelper.GetPromptedBlock(Resources.Command_Prompt_SelectInitialBlock, ed, trans);
             if (initialBlock == null) return; // Assume user cancelled prompt
 
-            var points = new List<Point3d>
-            {
-                GetPoint3dFromBlock(initialBlock)
-            };
+            var initialPoint = GetPoint3dFromBlock(initialBlock);
+            if(!initialPoint.HasValue) return; // No point determined from block then cancel
+
+            var points = new List<Point3d>{ initialPoint.Value };
 
             var nextLevel = true;
+
+            var options = new PromptEntityOptions(Resources.Command_Prompt_SelectNextBlock);
+            options.SetRejectMessage(Resources.Command_Prompt_RejectBlockReference);
+            options.AddAllowedClass(typeof(BlockReference), true);
+            options.AppendKeywordsToMessage = true;
+
+            foreach (var keyword in PolylineOptions) options.Keywords.Add(keyword);
+
             PromptEntityResult result = null;
             while (nextLevel)
             {
                 nextLevel = false;
-
-                var options = new PromptEntityOptions(Resources.Command_Prompt_SelectNextBlock);
-                options.SetRejectMessage(Resources.Command_Prompt_RejectBlockReference);
-                options.AddAllowedClass(typeof(BlockReference), true);
-                options.AppendKeywordsToMessage = true;
-
-                foreach (var keyword in PolylineOptions) options.Keywords.Add(keyword);
-
                 result = ed.GetEntity(options);
 
                 if (result.Status == PromptStatus.OK)
@@ -66,13 +66,15 @@ namespace Jpp.Ironstone.Housing.Commands
                     }
 
                     var point = GetPoint3dFromBlock(block);
-                    if (points.Any(p => p.Y.Equals(point.Y) && p.X.Equals(point.X) && p.Z.Equals(point.Z)))
+                    if (!point.HasValue) return; // No point determined from block then cancel
+
+                    if (points.Any(p => p.Y.Equals(point.Value.Y) && p.X.Equals(point.Value.X) && p.Z.Equals(point.Value.Z)))
                     {
                         HousingExtensionApplication.Current.Logger.Entry(Resources.Message_Block_Already_Selected, Severity.Information);
                     }
                     else
                     {
-                        points.Add(GetPoint3dFromBlock(block));
+                        points.Add(point.Value);
                     }
 
                     nextLevel = true;
@@ -110,14 +112,14 @@ namespace Jpp.Ironstone.Housing.Commands
             poly3d.Closed = shouldClose;
         }
 
-        private static Point3d GetPoint3dFromBlock(BlockReference block)
+        private static Point3d? GetPoint3dFromBlock(BlockReference block)
         {
             var level = LevelBlockHelper.GetLevelFromBlock(block);
             if (level.HasValue) return new Point3d(block.Position.X, block.Position.Y, level.Value);
-            
-            var ex = new ArgumentNullException(nameof(level));
-            HousingExtensionApplication.Current.Logger.LogException(ex);
-            throw ex;
+
+
+            HousingExtensionApplication.Current.Logger.LogException(new ArgumentNullException(nameof(level)));
+            return null;
         }
     }
 }
