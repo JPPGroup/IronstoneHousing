@@ -180,11 +180,31 @@ namespace Jpp.Ironstone.Housing.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to 
+        ///Select initial level block.
+        /// </summary>
+        internal static string Command_Prompt_SelectInitialBlock {
+            get {
+                return ResourceManager.GetString("Command_Prompt_SelectInitialBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
         ///Select intermedia point between the two blocks.
         /// </summary>
         internal static string Command_Prompt_SelectMidPoint {
             get {
                 return ResourceManager.GetString("Command_Prompt_SelectMidPoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///Select next level block.
+        /// </summary>
+        internal static string Command_Prompt_SelectNextBlock {
+            get {
+                return ResourceManager.GetString("Command_Prompt_SelectNextBlock", resourceCulture);
             }
         }
         
@@ -291,6 +311,15 @@ namespace Jpp.Ironstone.Housing.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Polyline From Levels.
+        /// </summary>
+        internal static string ExtensionApplication_UI_BtnPolylineFromLevelBlocks {
+            get {
+                return ResourceManager.GetString("ExtensionApplication_UI_BtnPolylineFromLevelBlocks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Housing.
         /// </summary>
         internal static string ExtensionApplication_UI_PanelTitle {
@@ -326,6 +355,26 @@ namespace Jpp.Ironstone.Housing.Properties {
             get {
                 object obj = ResourceManager.GetObject("level_block_small", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap line_from_levels_small {
+            get {
+                object obj = ResourceManager.GetObject("line_from_levels_small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///Level block already selected..
+        /// </summary>
+        internal static string Message_Block_Already_Selected {
+            get {
+                return ResourceManager.GetString("Message_Block_Already_Selected", resourceCulture);
             }
         }
         

@@ -163,9 +163,17 @@ Select existing level block</value>
     <value>
 Select back of footway point</value>
   </data>
+  <data name="Command_Prompt_SelectInitialBlock" xml:space="preserve">
+    <value>
+Select initial level block</value>
+  </data>
   <data name="Command_Prompt_SelectMidPoint" xml:space="preserve">
     <value>
 Select intermedia point between the two blocks</value>
+  </data>
+  <data name="Command_Prompt_SelectNextBlock" xml:space="preserve">
+    <value>
+Select next level block</value>
   </data>
   <data name="Command_Prompt_SelectRoadString" xml:space="preserve">
     <value>
@@ -203,6 +211,9 @@ Select start point</value>
   <data name="ExtensionApplication_UI_BtnLevelBlocks" xml:space="preserve">
     <value>Level Block</value>
   </data>
+  <data name="ExtensionApplication_UI_BtnPolylineFromLevelBlocks" xml:space="preserve">
+    <value>Polyline From Levels</value>
+  </data>
   <data name="ExtensionApplication_UI_PanelTitle" xml:space="preserve">
     <value>Housing</value>
   </data>
@@ -215,6 +226,13 @@ Select start point</value>
   </data>
   <data name="level_block_small" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\level-block-small.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="line_from_levels_small" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\line-from-levels-small.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Message_Block_Already_Selected" xml:space="preserve">
+    <value>
+Level block already selected.</value>
   </data>
   <data name="Message_Invalid_Level_Block_Selected" xml:space="preserve">
     <value>

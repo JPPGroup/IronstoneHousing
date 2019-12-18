@@ -155,6 +155,7 @@
     <Compile Include="Commands\GradientBlockCommands.cs" />
     <Compile Include="Commands\LevelBlockCommands.cs" />
     <Compile Include="Commands\LincolnshireCommands.cs" />
+    <Compile Include="Commands\PolylineCommands.cs" />
     <Compile Include="Helpers\GradientBlockHelper.cs" />
     <Compile Include="Helpers\LevelBlockHelper.cs" />
     <Compile Include="HousingExtensionApplication.cs" />
@@ -186,6 +187,7 @@
     <Content Include="IronstoneConfig.xml" />
     <Content Include="IronstoneConfigBeta.xml" />
     <Content Include="IronstoneConfigRelease.xml" />
+    <None Include="Resources\line-from-levels-small.png" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="AutocadStyleResourceDictionary.xaml">
