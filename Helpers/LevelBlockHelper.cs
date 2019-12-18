@@ -36,9 +36,9 @@ namespace Jpp.Ironstone.Housing.Helpers
             return hasLevelBlock;
         }
 
-        public static BlockReference GetPromptedBlock(string promptTest, Editor ed, Transaction trans)
+        public static BlockReference GetPromptedBlock(string prompt, Editor ed, Transaction trans)
         {
-            var objectId = ed.PromptForEntity(promptTest, typeof(BlockReference), Resources.Command_Prompt_RejectBlockReference, true);
+            var objectId = ed.PromptForEntity(prompt, typeof(BlockReference), Resources.Command_Prompt_RejectBlockReference, true);
             if (!objectId.HasValue) return null;
 
             var block = GetBlockReference(objectId.Value, trans);
@@ -48,7 +48,7 @@ namespace Jpp.Ironstone.Housing.Helpers
             return null;
         }
 
-        private static BlockReference GetBlockReference(ObjectId objectId, Transaction transaction)
+        public static BlockReference GetBlockReference(ObjectId objectId, Transaction transaction)
         {
             var block = transaction.GetObject(objectId, OpenMode.ForRead) as BlockReference;
             return string.Equals(block?.Name, LEVEL_BLOCK_NAME, StringComparison.CurrentCultureIgnoreCase) ? block : null;
@@ -77,7 +77,31 @@ namespace Jpp.Ironstone.Housing.Helpers
             return level;
         }
 
-        public static BlockReference NewLevelBlockAtPoint(Database database, Point3d point, double level)
+        public static BlockReference UpdateExistingLevelBlock(BlockReference block, double level)
+        {
+            //Update level value, but not adjust any other properties.
+            var trans = block.Database.TransactionManager.TopTransaction;
+
+            foreach (ObjectId attObjId in block.AttributeCollection)
+            {
+                var attDbObj = trans.GetObject(attObjId, OpenMode.ForRead);
+                if (attDbObj is AttributeReference attRef)
+                {
+                    if (string.Equals(attRef.Tag, LEVEL_ATTRIBUTE_NAME, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        attRef.UpgradeOpen();
+
+                        attRef.TextString = $"{level:0.000}";
+                        return block;
+                    }
+                }
+            }
+
+            HousingExtensionApplication.Current.Logger.Entry(Resources.Message_Invalid_Level_Block_Selected, Severity.Warning);
+            return null;
+        }
+
+        public static BlockReference NewLevelBlockAtPoint(Database database, Point3d point, double level, double? rotation = null)
         {
             var trans = database.TransactionManager.TopTransaction;
             var bt = (BlockTable)trans.GetObject(database.BlockTableId, OpenMode.ForRead);
@@ -94,6 +118,8 @@ namespace Jpp.Ironstone.Housing.Helpers
                         ScaleFactors = new Scale3d(0.2, 0.2, 0.2), //Block is annotative, scaled to match as advise by TL.
                         Layer = ObjectModel.Constants.FOR_REVIEW_LEVEL_LAYER
                     };
+                    
+                    if (rotation.HasValue) blockRef.Rotation = rotation.Value;
 
                     modelSpaceRecord.AppendEntity(blockRef);
                     trans.AddNewlyCreatedDBObject(blockRef, true);
