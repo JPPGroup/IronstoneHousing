@@ -5,6 +5,12 @@ VisualStudioVersion = 16.0.29411.108
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Housing", "Housing.csproj", "{A229332E-B252-4B22-B037-79A1AC0E79A1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ironstone Core", "..\ironstone-core\Ironstone Core\Ironstone Core.csproj", "{A3BFA507-A2C4-4C33-943B-6083133EE63C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ironstone Core UI", "..\ironstone-core\Ironstone Core UI\Ironstone Core UI.csproj", "{AC79C0AE-544A-4CB5-8FB7-665754BDEA9F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HousingObjectModel", "..\ironstone-object-model\Housing\HousingObjectModel.csproj", "{B45B4490-1CFB-412E-BCD0-9606290E4777}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -15,6 +21,18 @@ Global
 		{A229332E-B252-4B22-B037-79A1AC0E79A1}.Debug|x64.Build.0 = Debug|x64
 		{A229332E-B252-4B22-B037-79A1AC0E79A1}.Release|x64.ActiveCfg = Release|x64
 		{A229332E-B252-4B22-B037-79A1AC0E79A1}.Release|x64.Build.0 = Release|x64
+		{A3BFA507-A2C4-4C33-943B-6083133EE63C}.Debug|x64.ActiveCfg = Debug|x64
+		{A3BFA507-A2C4-4C33-943B-6083133EE63C}.Debug|x64.Build.0 = Debug|x64
+		{A3BFA507-A2C4-4C33-943B-6083133EE63C}.Release|x64.ActiveCfg = Release|x64
+		{A3BFA507-A2C4-4C33-943B-6083133EE63C}.Release|x64.Build.0 = Release|x64
+		{AC79C0AE-544A-4CB5-8FB7-665754BDEA9F}.Debug|x64.ActiveCfg = Debug|x64
+		{AC79C0AE-544A-4CB5-8FB7-665754BDEA9F}.Debug|x64.Build.0 = Debug|x64
+		{AC79C0AE-544A-4CB5-8FB7-665754BDEA9F}.Release|x64.ActiveCfg = Release|x64
+		{AC79C0AE-544A-4CB5-8FB7-665754BDEA9F}.Release|x64.Build.0 = Release|x64
+		{B45B4490-1CFB-412E-BCD0-9606290E4777}.Debug|x64.ActiveCfg = Debug|x64
+		{B45B4490-1CFB-412E-BCD0-9606290E4777}.Debug|x64.Build.0 = Debug|x64
+		{B45B4490-1CFB-412E-BCD0-9606290E4777}.Release|x64.ActiveCfg = Release|x64
+		{B45B4490-1CFB-412E-BCD0-9606290E4777}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

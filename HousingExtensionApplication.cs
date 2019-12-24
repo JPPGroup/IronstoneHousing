@@ -7,7 +7,9 @@ using Jpp.Ironstone.Housing;
 using Jpp.Ironstone.Housing.Commands;
 using Jpp.Ironstone.Housing.Properties;
 using System.Drawing;
+using NLog;
 using Unity;
+using ILogger = Jpp.Ironstone.Core.ServiceInterfaces.ILogger;
 
 [assembly: ExtensionApplication(typeof(HousingExtensionApplication))]
 namespace Jpp.Ironstone.Housing
