@@ -25,12 +25,12 @@ namespace Jpp.Ironstone.Housing
         /// <summary>
         /// Gets current instance of housing module.
         /// </summary>
-        public static HousingExtensionApplication Current { get; private set; }
+        internal static HousingExtensionApplication Current { get; private set; }
 
         /// <summary>
         /// Gets or sets logger instances.
         /// </summary>
-        public ILogger Logger { get; set; }
+        internal ILogger Logger { get; set; }
 
         /// <inheritdoc/>
         public void CreateUI()

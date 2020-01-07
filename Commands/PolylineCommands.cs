@@ -1,4 +1,11 @@
-﻿using Autodesk.AutoCAD.ApplicationServices.Core;
+﻿// <copyright file="PolylineCommands.cs" company="JPP Consulting">
+// Copyright (c) JPP Consulting. All rights reserved.
+// </copyright>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Autodesk.AutoCAD.ApplicationServices.Core;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Geometry;
@@ -6,21 +13,18 @@ using Autodesk.AutoCAD.Runtime;
 using Jpp.Ironstone.Core.ServiceInterfaces;
 using Jpp.Ironstone.Housing.Helpers;
 using Jpp.Ironstone.Housing.Properties;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Jpp.Ironstone.Housing.Commands
 {
     /// <summary>
-    /// Commands to generate 3d polyline from levels
+    /// Commands to generate 3d polyline from levels.
     /// </summary>
     public static class PolylineCommands
     {
         private static readonly string[] PolylineOptions = { "Close", "Open" };
 
         /// <summary>
-        /// Custom command to generate 3d polyline from level blocks
+        /// Custom command to generate 3d polyline from level blocks.
         /// </summary>
         [CommandMethod("C_Polyline_FromLevels")]
         public static void GeneratePolyline3dFromLevels()
@@ -34,12 +38,20 @@ namespace Jpp.Ironstone.Housing.Commands
             using var trans = db.TransactionManager.StartTransaction();
 
             var initialBlock = LevelBlockHelper.GetPromptedBlock(Resources.Command_Prompt_SelectInitialBlock, ed, trans);
-            if (initialBlock == null) return; // Assume user cancelled prompt
+            if (initialBlock == null)
+            {
+                // Assume user cancelled prompt
+                return;
+            }
 
             var initialPoint = GetPoint3dFromBlock(initialBlock);
-            if(!initialPoint.HasValue) return; // No point determined from block then cancel
+            if (!initialPoint.HasValue)
+            {
+                // No point determined from block then cancel
+                return;
+            }
 
-            var points = new List<Point3d>{ initialPoint.Value };
+            var points = new List<Point3d> { initialPoint.Value };
 
             var nextLevel = true;
 
@@ -48,7 +60,10 @@ namespace Jpp.Ironstone.Housing.Commands
             options.AddAllowedClass(typeof(BlockReference), true);
             options.AppendKeywordsToMessage = true;
 
-            foreach (var keyword in PolylineOptions) options.Keywords.Add(keyword);
+            foreach (var keyword in PolylineOptions)
+            {
+                options.Keywords.Add(keyword);
+            }
 
             PromptEntityResult result = null;
             while (nextLevel)
@@ -57,7 +72,7 @@ namespace Jpp.Ironstone.Housing.Commands
                 result = ed.GetEntity(options);
 
                 if (result.Status == PromptStatus.OK)
-                { 
+                {
                     var block = LevelBlockHelper.GetBlockReference(result.ObjectId, trans);
                     if (block == null)
                     {
@@ -66,7 +81,11 @@ namespace Jpp.Ironstone.Housing.Commands
                     }
 
                     var point = GetPoint3dFromBlock(block);
-                    if (!point.HasValue) return; // No point determined from block then cancel
+                    if (!point.HasValue)
+                    {
+                        // No point determined from block then cancel
+                        return;
+                    }
 
                     if (points.Any(p => p.Y.Equals(point.Value.Y) && p.X.Equals(point.Value.X) && p.Z.Equals(point.Value.Z)))
                     {
@@ -82,7 +101,10 @@ namespace Jpp.Ironstone.Housing.Commands
             }
 
             var close = false;
-            if (result.Status == PromptStatus.Keyword) close = result.StringResult == PolylineOptions[0];
+            if (result.Status == PromptStatus.Keyword)
+            {
+                close = result.StringResult == PolylineOptions[0];
+            }
 
             CreatePolyline3dFromPoints(db, points, close);
 
@@ -115,8 +137,10 @@ namespace Jpp.Ironstone.Housing.Commands
         private static Point3d? GetPoint3dFromBlock(BlockReference block)
         {
             var level = LevelBlockHelper.GetLevelFromBlock(block);
-            if (level.HasValue) return new Point3d(block.Position.X, block.Position.Y, level.Value);
-
+            if (level.HasValue)
+            {
+                return new Point3d(block.Position.X, block.Position.Y, level.Value);
+            }
 
             HousingExtensionApplication.Current.Logger.LogException(new ArgumentNullException(nameof(level)));
             return null;

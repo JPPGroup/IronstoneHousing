@@ -2,18 +2,18 @@
 // Copyright (c) JPP Consulting. All rights reserved.
 // </copyright>
 
+using System;
+using Autodesk.AutoCAD.ApplicationServices.Core;
+using Autodesk.AutoCAD.DatabaseServices;
+using Autodesk.AutoCAD.EditorInput;
+using Autodesk.AutoCAD.Geometry;
+using Autodesk.AutoCAD.Runtime;
+using Jpp.Ironstone.Core.UI.Autocad;
+using Jpp.Ironstone.Housing.Helpers;
+using Jpp.Ironstone.Housing.Properties;
+
 namespace Jpp.Ironstone.Housing.Commands
 {
-    using System;
-    using Autodesk.AutoCAD.ApplicationServices.Core;
-    using Autodesk.AutoCAD.DatabaseServices;
-    using Autodesk.AutoCAD.EditorInput;
-    using Autodesk.AutoCAD.Geometry;
-    using Autodesk.AutoCAD.Runtime;
-    using Jpp.Ironstone.Core.UI.Autocad;
-    using Jpp.Ironstone.Housing.Helpers;
-    using Jpp.Ironstone.Housing.Properties;
-
     /// <summary>
     /// Commands for use with Lincolnshire only.
     /// </summary>

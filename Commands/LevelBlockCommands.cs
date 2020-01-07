@@ -1,4 +1,9 @@
-﻿using Autodesk.AutoCAD.ApplicationServices.Core;
+﻿// <copyright file="LevelBlockCommands.cs" company="JPP Consulting">
+// Copyright (c) JPP Consulting. All rights reserved.
+// </copyright>
+
+using System;
+using Autodesk.AutoCAD.ApplicationServices.Core;
 using Autodesk.AutoCAD.Colors;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
@@ -7,25 +12,24 @@ using Autodesk.AutoCAD.Runtime;
 using Jpp.Ironstone.Core.UI.Autocad;
 using Jpp.Ironstone.Housing.Helpers;
 using Jpp.Ironstone.Housing.Properties;
-using System;
 
 namespace Jpp.Ironstone.Housing.Commands
 {
     /// <summary>
-    /// Commands to add level blocks
+    /// Commands to add level blocks.
     /// </summary>
     public static class LevelBlockCommands
     {
         private static readonly string[] GradientKeywords = { "No", "Yes" };
         private static readonly string[] BlockKeywords = { "New", "Existing" };
 
-        private static double _level; //cache of previous level
-        private static double _gradient; //cache of previous gradient
-        private static double _invert; //cache of previous invert
-        private static string _includeGradient = GradientKeywords[0]; //cache of previous gradient selection
+        private static double previousLevel; // Cache of previous level
+        private static double previousGradient; // Cache of previous gradient
+        private static double previousInvert; // Cache of previous invert
+        private static string previousIncludeGradient = GradientKeywords[0]; // Cache of previous gradient selection
 
         /// <summary>
-        /// Custom command to calculate a level at given point between two existing levels
+        /// Custom command to calculate a level at given point between two existing levels.
         /// </summary>
         [CommandMethod("C_LevelBlock_BetweenLevels")]
         public static void CalculateLevelBetweenLevels()
@@ -38,26 +42,40 @@ namespace Jpp.Ironstone.Housing.Commands
             using var trans = db.TransactionManager.StartTransaction();
 
             var startBlock = LevelBlockHelper.GetPromptedBlock(Resources.Command_Prompt_SelectStartLevelBlock, ed, trans);
-            if (startBlock == null) return; //Assume user cancelled
-            
+            if (startBlock == null)
+            {
+                // Assume user cancelled
+                return;
+            }
+
             var startLevel = LevelBlockHelper.GetLevelFromBlock(startBlock);
-            if (!startLevel.HasValue) return;
+            if (!startLevel.HasValue)
+            {
+                return;
+            }
 
             var endBlock = LevelBlockHelper.GetPromptedBlock(Resources.Command_Prompt_SelectEndLevelBlock, ed, trans);
-            if (endBlock == null) return; //Assume user cancelled
+            if (endBlock == null)
+            {
+                // Assume user cancelled
+                return;
+            }
 
             var endLevel = LevelBlockHelper.GetLevelFromBlock(endBlock);
-            if (!endLevel.HasValue) return;
-            
+            if (!endLevel.HasValue)
+            {
+                return;
+            }
+
             var s = new Point3d(startBlock.Position.X, startBlock.Position.Y, 0);
             var e = new Point3d(endBlock.Position.X, endBlock.Position.Y, 0);
 
             Point3d? midPoint;
 
             using var line = new Line(s, e) { Color = Color.FromRgb(0, 255, 0) };
-            { 
-                var acBlkTbl = (BlockTable) trans.GetObject(db.BlockTableId, OpenMode.ForRead);
-                var acBlkTblRec = (BlockTableRecord) trans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
+            {
+                var acBlkTbl = (BlockTable)trans.GetObject(db.BlockTableId, OpenMode.ForRead);
+                var acBlkTblRec = (BlockTableRecord)trans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
                 acBlkTblRec.AppendEntity(line);
                 trans.AddNewlyCreatedDBObject(line, true);
 
@@ -67,7 +85,10 @@ namespace Jpp.Ironstone.Housing.Commands
                 while (midPoint.HasValue)
                 {
                     var m = new Point3d(midPoint.Value.X, midPoint.Value.Y, 0);
-                    if (line.GetGeCurve().IsOn(m)) break;
+                    if (line.GetGeCurve().IsOn(m))
+                    {
+                        break;
+                    }
 
                     midPoint = ed.PromptForPosition(Resources.Command_Prompt_SelectMidPoint);
                 }
@@ -78,7 +99,8 @@ namespace Jpp.Ironstone.Housing.Commands
 
             if (!midPoint.HasValue)
             {
-                return; //Assume user cancelled
+                // Assume user cancelled
+                return;
             }
 
             var gradient = 1 / ((endLevel.Value - startLevel.Value) / line.Length);
@@ -90,7 +112,7 @@ namespace Jpp.Ironstone.Housing.Commands
         }
 
         /// <summary>
-        /// Custom command to calculate a level from a given point at gradient
+        /// Custom command to calculate a level from a given point at gradient.
         /// </summary>
         [CommandMethod("C_LevelBlock_FromPointAtGradient")]
         public static void CalculateLevelFromPointAtGradient()
@@ -103,28 +125,47 @@ namespace Jpp.Ironstone.Housing.Commands
 
             using var trans = db.TransactionManager.StartTransaction();
 
-            if (!LevelBlockHelper.HasLevelBlock(db)) throw new ArgumentException(Resources.Exception_NoLevelBlock);
+            if (!LevelBlockHelper.HasLevelBlock(db))
+            {
+                throw new ArgumentException(Resources.Exception_NoLevelBlock);
+            }
 
             var startPoint = ed.PromptForPosition(Resources.Command_Prompt_SelectStartPoint);
-            if (!startPoint.HasValue) return; //Assume user cancelled
+            if (!startPoint.HasValue)
+            {
+                // Assume user cancelled
+                return;
+            }
 
-            var startLevel = ed.PromptForDouble(Resources.Command_Prompt_EnterLevel, _level);
-            if (!startLevel.HasValue) return; //Assume user cancelled
+            var startLevel = ed.PromptForDouble(Resources.Command_Prompt_EnterLevel, previousLevel);
+            if (!startLevel.HasValue)
+            {
+                // Assume user cancelled
+                return;
+            }
 
-            var gradient = ed.PromptForDouble(Resources.Command_Prompt_EnterGradient, _gradient);
-            if (!gradient.HasValue) return; //Assume user cancelled
+            var gradient = ed.PromptForDouble(Resources.Command_Prompt_EnterGradient, previousGradient);
+            if (!gradient.HasValue)
+            {
+                // Assume user cancelled
+                return;
+            }
 
             var endBlock = GenerateOrUpdateBlockWithCalcLevel(ed, startPoint.Value, startLevel.Value, gradient.Value, db);
-            if (endBlock == null) return; //Assume user cancelled
+            if (endBlock == null)
+            {
+                // Assume user cancelled
+                return;
+            }
 
-            _level = startLevel.Value;
-            _gradient = gradient.Value;
-            
+            previousLevel = startLevel.Value;
+            previousGradient = gradient.Value;
+
             trans.Commit();
         }
 
         /// <summary>
-        /// Custom command to calculate a level from a given block at gradient
+        /// Custom command to calculate a level from a given block at gradient.
         /// </summary>
         [CommandMethod("C_LevelBlock_FromBlockAtGradient")]
         public static void CalculateLevelFromLevelBlockAtGradient()
@@ -137,31 +178,52 @@ namespace Jpp.Ironstone.Housing.Commands
 
             using var trans = db.TransactionManager.StartTransaction();
 
-            if (!LevelBlockHelper.HasLevelBlock(db)) throw new ArgumentException(Resources.Exception_NoLevelBlock);
+            if (!LevelBlockHelper.HasLevelBlock(db))
+            {
+                throw new ArgumentException(Resources.Exception_NoLevelBlock);
+            }
 
             var startBlock = LevelBlockHelper.GetPromptedBlock(Resources.Command_Prompt_SelectStartLevelBlock, ed, trans);
-            if (startBlock == null) return; //Assume user cancelled
+            if (startBlock == null)
+            {
+                // Assume user cancelled
+                return;
+            }
 
             var startLevel = LevelBlockHelper.GetLevelFromBlock(startBlock);
-            if (!startLevel.HasValue) return;
+            if (!startLevel.HasValue)
+            {
+                return;
+            }
 
             var startPoint = startBlock.Position;
 
-            var gradient = ed.PromptForDouble(Resources.Command_Prompt_EnterGradient, _gradient);
-            if (!gradient.HasValue) return; //Assume user cancelled
+            var gradient = ed.PromptForDouble(Resources.Command_Prompt_EnterGradient, previousGradient);
+            if (!gradient.HasValue)
+            {
+                // Assume user cancelled
+                return;
+            }
 
             var endBlock = GenerateOrUpdateBlockWithCalcLevel(ed, startPoint, startLevel.Value, gradient.Value, db, startBlock.Rotation);
-            if (endBlock == null) return; //Assume user cancelled
+            if (endBlock == null)
+            {
+                // Assume user cancelled
+                return;
+            }
 
-            if (ShouldIncludeGradient(ed)) GradientBlockHelper.GenerateBlock(db, startBlock, endBlock);
+            if (ShouldIncludeGradient(ed))
+            {
+                GradientBlockHelper.GenerateBlock(db, startBlock, endBlock);
+            }
 
-            _gradient = gradient.Value;
+            previousGradient = gradient.Value;
 
             trans.Commit();
         }
 
         /// <summary>
-        /// Custom command to calculate a level from a given block with a set invert
+        /// Custom command to calculate a level from a given block with a set invert.
         /// </summary>
         [CommandMethod("C_LevelBlock_FromBlockWithInvert")]
         public static void CalculateLevelFromLevelBlockWithInvert()
@@ -174,25 +236,46 @@ namespace Jpp.Ironstone.Housing.Commands
 
             using var trans = db.TransactionManager.StartTransaction();
 
-            if (!LevelBlockHelper.HasLevelBlock(db)) throw new ArgumentException(Resources.Exception_NoLevelBlock);
+            if (!LevelBlockHelper.HasLevelBlock(db))
+            {
+                throw new ArgumentException(Resources.Exception_NoLevelBlock);
+            }
 
             var startBlock = LevelBlockHelper.GetPromptedBlock(Resources.Command_Prompt_SelectStartLevelBlock, ed, trans);
-            if (startBlock == null) return; //Assume user cancelled
+            if (startBlock == null)
+            {
+                // Assume user cancelled
+                return;
+            }
 
             var startLevel = LevelBlockHelper.GetLevelFromBlock(startBlock);
-            if (!startLevel.HasValue) return;
+            if (!startLevel.HasValue)
+            {
+                return;
+            }
 
-            var invert = ed.PromptForDouble(Resources.Command_Prompt_EnterInvert, _invert);
-            if (!invert.HasValue) return; //Assume user cancelled
+            var invert = ed.PromptForDouble(Resources.Command_Prompt_EnterInvert, previousInvert);
+            if (!invert.HasValue)
+            {
+                // Assume user cancelled
+                return;
+            }
 
             var endLevel = startLevel.Value - invert.Value;
 
             var endBlock = GenerateOrUpdateBlockWithSetLevel(ed, endLevel, db, startBlock.Rotation);
-            if (endBlock == null) return; //Assume user cancelled
+            if (endBlock == null)
+            {
+                // Assume user cancelled
+                return;
+            }
 
-            if (ShouldIncludeGradient(ed)) GradientBlockHelper.GenerateBlock(db, startBlock, endBlock);
+            if (ShouldIncludeGradient(ed))
+            {
+                GradientBlockHelper.GenerateBlock(db, startBlock, endBlock);
+            }
 
-            _invert = invert.Value;
+            previousInvert = invert.Value;
 
             trans.Commit();
         }
@@ -203,7 +286,11 @@ namespace Jpp.Ironstone.Housing.Commands
             if (IsNewBlock(ed))
             {
                 var endPoint = ed.PromptForPosition(Resources.Command_Prompt_SelectEndPoint);
-                if (!endPoint.HasValue) return null; //Assume user cancelled prompted, therefore return null block
+                if (!endPoint.HasValue)
+                {
+                    // Assume user cancelled prompted, therefore return null block
+                    return null;
+                }
 
                 endBlock = LevelBlockHelper.NewLevelBlockAtPoint(db, endPoint.Value, level, rotation);
             }
@@ -211,9 +298,13 @@ namespace Jpp.Ironstone.Housing.Commands
             {
                 var trans = db.TransactionManager.TopTransaction;
                 var existingBlock = LevelBlockHelper.GetPromptedBlock(Resources.Command_Prompt_SelectExistingLevelBlock, ed, trans);
-                if (existingBlock == null) return null; //Assume user cancelled prompted, therefore return null block
+                if (existingBlock == null)
+                {
+                    // Assume user cancelled prompted, therefore return null block
+                    return null;
+                }
 
-                endBlock =  LevelBlockHelper.UpdateExistingLevelBlock(existingBlock, level);
+                endBlock = LevelBlockHelper.UpdateExistingLevelBlock(existingBlock, level);
             }
 
             return endBlock;
@@ -226,8 +317,12 @@ namespace Jpp.Ironstone.Housing.Commands
             if (IsNewBlock(ed))
             {
                 var endPoint = ed.PromptForPosition(Resources.Command_Prompt_SelectEndPoint);
-                if (!endPoint.HasValue) return null; //Assume user cancelled prompted, therefore return null block
-                
+                if (!endPoint.HasValue)
+                {
+                    // Assume user cancelled prompted, therefore return null block
+                    return null;
+                }
+
                 var endLevel = CalculateLevel(startPoint, endPoint.Value, startLevel, gradient);
                 endBlock = LevelBlockHelper.NewLevelBlockAtPoint(db, endPoint.Value, endLevel, rotation);
             }
@@ -235,7 +330,11 @@ namespace Jpp.Ironstone.Housing.Commands
             {
                 var trans = db.TransactionManager.TopTransaction;
                 var existingBlock = LevelBlockHelper.GetPromptedBlock(Resources.Command_Prompt_SelectExistingLevelBlock, ed, trans);
-                if (existingBlock == null) return null; //Assume user cancelled prompted, therefore return null block
+                if (existingBlock == null)
+                {
+                    // Assume user cancelled prompted, therefore return null block
+                    return null;
+                }
 
                 var endLevel = CalculateLevel(startPoint, existingBlock.Position, startLevel, gradient);
                 endBlock = LevelBlockHelper.UpdateExistingLevelBlock(existingBlock, endLevel);
@@ -246,8 +345,8 @@ namespace Jpp.Ironstone.Housing.Commands
 
         private static bool ShouldIncludeGradient(Editor ed)
         {
-            var result = ed.PromptForKeywords(Resources.Command_Prompt_IncludeGradientBlock, GradientKeywords, _includeGradient);
-            _includeGradient = result;
+            var result = ed.PromptForKeywords(Resources.Command_Prompt_IncludeGradientBlock, GradientKeywords, previousIncludeGradient);
+            previousIncludeGradient = result;
             return result == GradientKeywords[1];
         }
 
@@ -259,11 +358,11 @@ namespace Jpp.Ironstone.Housing.Commands
 
         private static double CalculateLevel(Point3d startPoint, Point3d endPoint, double startLevel, double gradient)
         {
-            var s = new Point3d(startPoint.X, startPoint.Y, 0); //Remove z for line length
-            var e = new Point3d(endPoint.X, endPoint.Y, 0); //Remove z for line length
+            var s = new Point3d(startPoint.X, startPoint.Y, 0); // Remove z for line length
+            var e = new Point3d(endPoint.X, endPoint.Y, 0); // Remove z for line length
             using var line = new Line(s, e);
 
-            return startLevel + line.Length * (1 / gradient);
+            return startLevel + (line.Length * (1 / gradient));
         }
     }
 }

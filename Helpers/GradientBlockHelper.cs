@@ -1,7 +1,11 @@
-﻿using Autodesk.AutoCAD.DatabaseServices;
+﻿// <copyright file="GradientBlockHelper.cs" company="JPP Consulting">
+// Copyright (c) JPP Consulting. All rights reserved.
+// </copyright>
+
+using System;
+using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
 using Jpp.Ironstone.Housing.Properties;
-using System;
 
 namespace Jpp.Ironstone.Housing.Helpers
 {
@@ -11,17 +15,20 @@ namespace Jpp.Ironstone.Housing.Helpers
          * Consider moving constants below to setting, or similar.
          * At the moment assuming that if these names are changed, then there might be other breaking changes.
          */
-        private const string GRADIENT_BLOCK_NAME = "ProposedGradient";
-        private const string GRADIENT_ATTRIBUTE_NAME = "GRADIENT";
-        private const string FLIP_ATTRIBUTE_NAME = "Flip state1";
-        private const double ARROW_FULL_LENGTH = 2; // Hack to move position based on a known length
+        private const string GradientBlockName = "ProposedGradient";
+        private const string GradientAttributeName = "GRADIENT";
+        private const string FlipAttributeName = "Flip state1";
+        private const double ArrowFullLength = 2; // Hack to move position based on a known length
 
         public static void GenerateBlock(Database database, BlockReference x, BlockReference y)
         {
             var xLevel = LevelBlockHelper.GetLevelFromBlock(x);
             var yLevel = LevelBlockHelper.GetLevelFromBlock(y);
 
-            if (!xLevel.HasValue || !yLevel.HasValue) return;
+            if (!xLevel.HasValue || !yLevel.HasValue)
+            {
+                return;
+            }
 
             if (xLevel.Value.Equals(yLevel.Value))
             {
@@ -35,7 +42,7 @@ namespace Jpp.Ironstone.Housing.Helpers
             double endLevel;
             var plane = new Plane(Point3d.Origin, Vector3d.ZAxis);
 
-            //Always point downhill
+            // Always point downhill
             if (xLevel.Value > yLevel.Value)
             {
                 startPoint = x.Position.Convert2d(plane);
@@ -54,10 +61,10 @@ namespace Jpp.Ironstone.Housing.Helpers
             var vector = endPoint.GetAsVector() - startPoint.GetAsVector();
 
             var gradient = 1 / ((startLevel - endLevel) / vector.Length);
-            var midPoint = startPoint + vector * 0.5;
+            var midPoint = startPoint + (vector * 0.5);
 
             // Hack to move position based on a known length
-            var shiftVector = vector.GetNormal() * ARROW_FULL_LENGTH;
+            var shiftVector = vector.GetNormal() * ArrowFullLength;
             var matrix = Matrix2d.Displacement(shiftVector);
             midPoint.TransformBy(matrix);
 
@@ -76,7 +83,7 @@ namespace Jpp.Ironstone.Housing.Helpers
             foreach (var btrId in bt)
             {
                 var btr = (BlockTableRecord)trans.GetObject(btrId, OpenMode.ForRead);
-                if (string.Equals(btr.Name, GRADIENT_BLOCK_NAME, StringComparison.CurrentCultureIgnoreCase))
+                if (string.Equals(btr.Name, GradientBlockName, StringComparison.CurrentCultureIgnoreCase))
                 {
                     var blockId = btr.ObjectId;
                     var modelSpaceRecord = (BlockTableRecord)trans.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
@@ -85,7 +92,7 @@ namespace Jpp.Ironstone.Housing.Helpers
                     {
                         ScaleFactors = new Scale3d(0.2, 0.2, 0.2),
                         Rotation = flip ? rotation + Math.PI : rotation,
-                        Layer = ObjectModel.Constants.FOR_REVIEW_GRADIENT_LAYER
+                        Layer = ObjectModel.Constants.FOR_REVIEW_GRADIENT_LAYER,
                     };
 
                     modelSpaceRecord.AppendEntity(blockRef);
@@ -98,10 +105,13 @@ namespace Jpp.Ironstone.Housing.Helpers
                             var dbObj = trans.GetObject(objId, OpenMode.ForRead);
                             if (dbObj is AttributeDefinition acAtt)
                             {
-                                if (acAtt.Constant) continue;
+                                if (acAtt.Constant)
+                                {
+                                    continue;
+                                }
 
                                 using var acAttRef = new AttributeReference();
-                                if (string.Equals(acAtt.Tag, GRADIENT_ATTRIBUTE_NAME, StringComparison.CurrentCultureIgnoreCase))
+                                if (string.Equals(acAtt.Tag, GradientAttributeName, StringComparison.CurrentCultureIgnoreCase))
                                 {
                                     acAttRef.SetAttributeFromBlock(acAtt, blockRef.BlockTransform);
                                     acAttRef.Position = acAtt.Position.TransformBy(blockRef.BlockTransform);
@@ -119,7 +129,7 @@ namespace Jpp.Ironstone.Housing.Helpers
                         var props = blockRef.DynamicBlockReferencePropertyCollection;
                         foreach (DynamicBlockReferenceProperty prop in props)
                         {
-                            if(string.Equals(prop.PropertyName,FLIP_ATTRIBUTE_NAME, StringComparison.CurrentCultureIgnoreCase))
+                            if (string.Equals(prop.PropertyName, FlipAttributeName, StringComparison.CurrentCultureIgnoreCase))
                             {
                                 prop.Value = Convert.ToInt16(flip);
                             }
