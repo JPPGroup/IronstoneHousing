@@ -5,6 +5,7 @@ using Jpp.Ironstone.Core.ServiceInterfaces;
 using Jpp.Ironstone.Core.UI.Autocad;
 using Jpp.Ironstone.Housing.Properties;
 using System;
+using Jpp.Ironstone.Core.Autocad;
 
 namespace Jpp.Ironstone.Housing.Helpers
 {
@@ -51,7 +52,7 @@ namespace Jpp.Ironstone.Housing.Helpers
         public static BlockReference GetBlockReference(ObjectId objectId, Transaction transaction)
         {
             var block = transaction.GetObject(objectId, OpenMode.ForRead) as BlockReference;
-            return string.Equals(block?.Name, LEVEL_BLOCK_NAME, StringComparison.CurrentCultureIgnoreCase) ? block : null;
+            return string.Equals(block?.EffectiveName(), LEVEL_BLOCK_NAME, StringComparison.CurrentCultureIgnoreCase) ? block : null;
         }
 
         public static double? GetLevelFromBlock(BlockReference block)

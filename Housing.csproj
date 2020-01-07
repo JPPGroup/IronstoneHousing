@@ -95,8 +95,8 @@
     <Reference Include="Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Common.0.1.5\lib\netstandard2.0\Common.dll</HintPath>
     </Reference>
-    <Reference Include="IronstoneCore, Version=0.3.1.161, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>packages\Jpp.Ironstone.Core.0.3.1\lib\net472\IronstoneCore.dll</HintPath>
+    <Reference Include="IronstoneCore, Version=0.3.3.163, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>packages\Jpp.Ironstone.Core.0.3.3\lib\net472\IronstoneCore.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="IronstoneCoreUI, Version=0.3.1.161, Culture=neutral, processorArchitecture=AMD64">
