@@ -62,7 +62,7 @@ namespace Jpp.Ironstone.Housing.Commands
                     var roadLevel = Math.Round(roadPoint.Z, 3);
                     var footwayLevel = roadLevel + level;
 
-                    LevelBlockHelper.NewLevelBlockAtPoint(db, point.Value, footwayLevel);
+                    LevelBlockHelper.NewLevelBlockAtPoint(db, new LevelBlockProps(point.Value, footwayLevel));
 
                     point = ed.PromptForPosition(Resources.Command_Prompt_SelectFootwayPoint);
                 }

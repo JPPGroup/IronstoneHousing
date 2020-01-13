@@ -84,7 +84,10 @@ namespace Jpp.Ironstone.Housing.Commands
             var gradient = 1 / ((endLevel.Value - startLevel.Value) / line.Length);
             var midLevel = CalculateLevel(startBlock.Position, midPoint.Value, startLevel.Value, gradient);
 
-            LevelBlockHelper.NewLevelBlockAtPoint(db, midPoint.Value, midLevel, startBlock.Rotation);
+            var rotate = LevelBlockHelper.GetRotateFromBlock(startBlock);
+            var props = new LevelBlockProps(midPoint.Value, midLevel, startBlock.Rotation, rotate);
+
+            LevelBlockHelper.NewLevelBlockAtPoint(db, props);
 
             trans.Commit();
         }
@@ -150,7 +153,8 @@ namespace Jpp.Ironstone.Housing.Commands
             var gradient = ed.PromptForDouble(Resources.Command_Prompt_EnterGradient, _gradient);
             if (!gradient.HasValue) return; //Assume user cancelled
 
-            var endBlock = GenerateOrUpdateBlockWithCalcLevel(ed, startPoint, startLevel.Value, gradient.Value, db, startBlock.Rotation);
+            var rotate = LevelBlockHelper.GetRotateFromBlock(startBlock);
+            var endBlock = GenerateOrUpdateBlockWithCalcLevel(ed, startPoint, startLevel.Value, gradient.Value, db, startBlock.Rotation, rotate);
             if (endBlock == null) return; //Assume user cancelled
 
             if (ShouldIncludeGradient(ed)) GradientBlockHelper.GenerateBlock(db, startBlock, endBlock);
@@ -186,8 +190,9 @@ namespace Jpp.Ironstone.Housing.Commands
             if (!invert.HasValue) return; //Assume user cancelled
 
             var endLevel = startLevel.Value - invert.Value;
+            var rotate = LevelBlockHelper.GetRotateFromBlock(startBlock);
 
-            var endBlock = GenerateOrUpdateBlockWithSetLevel(ed, endLevel, db, startBlock.Rotation);
+            var endBlock = GenerateOrUpdateBlockWithSetLevel(ed, endLevel, db, startBlock.Rotation, rotate);
             if (endBlock == null) return; //Assume user cancelled
 
             if (ShouldIncludeGradient(ed)) GradientBlockHelper.GenerateBlock(db, startBlock, endBlock);
@@ -197,7 +202,7 @@ namespace Jpp.Ironstone.Housing.Commands
             trans.Commit();
         }
 
-        private static BlockReference GenerateOrUpdateBlockWithSetLevel(Editor ed, double level, Database db, double? rotation = null)
+        private static BlockReference GenerateOrUpdateBlockWithSetLevel(Editor ed, double level, Database db, double? rotation, double? rotate)
         {
             BlockReference endBlock;
             if (IsNewBlock(ed))
@@ -205,7 +210,8 @@ namespace Jpp.Ironstone.Housing.Commands
                 var endPoint = ed.PromptForPosition(Resources.Command_Prompt_SelectEndPoint);
                 if (!endPoint.HasValue) return null; //Assume user cancelled prompted, therefore return null block
 
-                endBlock = LevelBlockHelper.NewLevelBlockAtPoint(db, endPoint.Value, level, rotation);
+                var props = new LevelBlockProps(endPoint.Value, level, rotation, rotate);
+                endBlock = LevelBlockHelper.NewLevelBlockAtPoint(db, props);
             }
             else
             {
@@ -219,7 +225,7 @@ namespace Jpp.Ironstone.Housing.Commands
             return endBlock;
         }
 
-        private static BlockReference GenerateOrUpdateBlockWithCalcLevel(Editor ed, Point3d startPoint, double startLevel, double gradient, Database db, double? rotation = null)
+        private static BlockReference GenerateOrUpdateBlockWithCalcLevel(Editor ed, Point3d startPoint, double startLevel, double gradient, Database db, double? rotation = null, double? rotate = null)
         {
             BlockReference endBlock;
 
@@ -229,7 +235,8 @@ namespace Jpp.Ironstone.Housing.Commands
                 if (!endPoint.HasValue) return null; //Assume user cancelled prompted, therefore return null block
                 
                 var endLevel = CalculateLevel(startPoint, endPoint.Value, startLevel, gradient);
-                endBlock = LevelBlockHelper.NewLevelBlockAtPoint(db, endPoint.Value, endLevel, rotation);
+                var props = new LevelBlockProps(endPoint.Value, endLevel, rotation, rotate);
+                endBlock = LevelBlockHelper.NewLevelBlockAtPoint(db, props);
             }
             else
             {

@@ -417,5 +417,14 @@ namespace Jpp.Ironstone.Housing.Properties {
                 return ResourceManager.GetString("Message_No_Road_String_Selected", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No rotate grip set on block..
+        /// </summary>
+        internal static string Message_No_Rotate_Set_On_Block {
+            get {
+                return ResourceManager.GetString("Message_No_Rotate_Set_On_Block", resourceCulture);
+            }
+        }
     }
 }

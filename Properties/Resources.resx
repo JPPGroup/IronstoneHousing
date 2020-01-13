@@ -250,4 +250,7 @@ No level set on block.</value>
     <value>
 No road string selected.</value>
   </data>
+  <data name="Message_No_Rotate_Set_On_Block" xml:space="preserve">
+    <value>No rotate grip set on block.</value>
+  </data>
 </root>

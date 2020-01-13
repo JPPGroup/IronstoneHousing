@@ -1,11 +1,11 @@
 ﻿using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Geometry;
+using Jpp.Ironstone.Core.Autocad;
 using Jpp.Ironstone.Core.ServiceInterfaces;
 using Jpp.Ironstone.Core.UI.Autocad;
 using Jpp.Ironstone.Housing.Properties;
 using System;
-using Jpp.Ironstone.Core.Autocad;
 
 namespace Jpp.Ironstone.Housing.Helpers
 {
@@ -17,6 +17,7 @@ namespace Jpp.Ironstone.Housing.Helpers
          */
         private const string LEVEL_BLOCK_NAME = "ProposedLevel"; 
         private const string LEVEL_ATTRIBUTE_NAME = "LEVEL";
+        private const string ROTATE_ATTRIBUTE_NAME = "Rotate";
 
         public static bool HasLevelBlock(Database database)
         {
@@ -102,7 +103,7 @@ namespace Jpp.Ironstone.Housing.Helpers
             return null;
         }
 
-        public static BlockReference NewLevelBlockAtPoint(Database database, Point3d point, double level, double? rotation = null)
+        public static BlockReference NewLevelBlockAtPoint(Database database, LevelBlockProps props)
         {
             var trans = database.TransactionManager.TopTransaction;
             var bt = (BlockTable)trans.GetObject(database.BlockTableId, OpenMode.ForRead);
@@ -114,13 +115,12 @@ namespace Jpp.Ironstone.Housing.Helpers
                     var blockId = btr.ObjectId;
                     var modelSpaceRecord = (BlockTableRecord)trans.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
 
-                    var blockRef = new BlockReference(point, blockId)
+                    var blockRef = new BlockReference(props.Point, blockId)
                     {
-                        ScaleFactors = new Scale3d(0.2, 0.2, 0.2), //Block is annotative, scaled to match as advise by TL.
                         Layer = ObjectModel.Constants.FOR_REVIEW_LEVEL_LAYER
                     };
                     
-                    if (rotation.HasValue) blockRef.Rotation = rotation.Value;
+                    if (props.Rotation.HasValue) blockRef.Rotation = props.Rotation.Value;
 
                     modelSpaceRecord.AppendEntity(blockRef);
                     trans.AddNewlyCreatedDBObject(blockRef, true);
@@ -141,7 +141,7 @@ namespace Jpp.Ironstone.Housing.Helpers
                                         acAttRef.SetAttributeFromBlock(acAtt, blockRef.BlockTransform);
                                         acAttRef.Position = acAtt.Position.TransformBy(blockRef.BlockTransform);
 
-                                        acAttRef.TextString = $"{level:0.000}";
+                                        acAttRef.TextString = $"{props.Level:0.000}";
                                         blockRef.AttributeCollection.AppendAttribute(acAttRef);
                                         trans.AddNewlyCreatedDBObject(acAttRef, true);
                                     }
@@ -151,6 +151,19 @@ namespace Jpp.Ironstone.Housing.Helpers
                         }
                     }
 
+                    if (props.RotateGrip.HasValue && blockRef.IsDynamicBlock)
+                    {
+                        var dynamicProps = blockRef.DynamicBlockReferencePropertyCollection;
+                        foreach (DynamicBlockReferenceProperty dynamicProp in dynamicProps)
+                        {
+                            if (string.Equals(dynamicProp.PropertyName, ROTATE_ATTRIBUTE_NAME, StringComparison.CurrentCultureIgnoreCase))
+                            {
+                                dynamicProp.Value = props.RotateGrip.Value;
+                            }
+                        }
+                    }
+
+
                     database.TransactionManager.QueueForGraphicsFlush();
 
                     return blockRef;
@@ -159,5 +172,41 @@ namespace Jpp.Ironstone.Housing.Helpers
 
             return null;
         }
+
+        internal static double? GetRotateFromBlock(BlockReference block)
+        {
+            double? rotate = null;
+
+            if (block.IsDynamicBlock)
+            {
+                var dynamicProps = block.DynamicBlockReferencePropertyCollection;
+                foreach (DynamicBlockReferenceProperty dynamicProp in dynamicProps)
+                {
+                    if (string.Equals(dynamicProp.PropertyName, ROTATE_ATTRIBUTE_NAME, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        rotate = Convert.ToDouble(dynamicProp.Value);
+                    }
+                }
+            }
+
+            if (!rotate.HasValue) HousingExtensionApplication.Current.Logger.Entry(Resources.Message_No_Rotate_Set_On_Block, Severity.Warning);
+            return rotate;
+        }
+    }
+
+    internal struct LevelBlockProps
+    {
+        public LevelBlockProps(Point3d point, double level, double? rotation = null, double? rotateGrip = null)
+        {
+            Point = point;
+            Level = level;
+            Rotation = rotation;
+            RotateGrip = rotateGrip;
+        }
+
+        public Point3d Point { get; }
+        public double Level { get; }
+        public double? Rotation { get; }
+        public double? RotateGrip { get; }
     }
 }
