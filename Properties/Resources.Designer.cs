@@ -419,7 +419,8 @@ namespace Jpp.Ironstone.Housing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No rotate grip set on block..
+        ///   Looks up a localized string similar to 
+        ///No rotate attribute set on block..
         /// </summary>
         internal static string Message_No_Rotate_Set_On_Block {
             get {

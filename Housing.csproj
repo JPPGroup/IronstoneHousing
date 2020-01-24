@@ -156,6 +156,7 @@
     <Compile Include="Commands\LevelBlockCommands.cs" />
     <Compile Include="Commands\LincolnshireCommands.cs" />
     <Compile Include="Commands\PolylineCommands.cs" />
+    <Compile Include="Helpers\CommandHelper.cs" />
     <Compile Include="Helpers\GradientBlockHelper.cs" />
     <Compile Include="Helpers\LevelBlockHelper.cs" />
     <Compile Include="HousingExtensionApplication.cs" />

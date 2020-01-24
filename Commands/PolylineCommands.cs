@@ -6,7 +6,6 @@ using Autodesk.AutoCAD.Runtime;
 using Jpp.Ironstone.Core.ServiceInterfaces;
 using Jpp.Ironstone.Housing.Helpers;
 using Jpp.Ironstone.Housing.Properties;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -33,14 +32,10 @@ namespace Jpp.Ironstone.Housing.Commands
 
             using var trans = db.TransactionManager.StartTransaction();
 
-            var initialBlock = LevelBlockHelper.GetPromptedBlock(Resources.Command_Prompt_SelectInitialBlock, ed, trans);
-            if (initialBlock == null) return; // Assume user cancelled prompt
+            var initial = LevelBlockHelper.GetPromptedBlockDetails(Resources.Command_Prompt_SelectInitialBlock, ed, trans);
+            if(!initial.IsValid) return;
 
-            var initialPoint = GetPoint3dFromBlock(initialBlock);
-            if(!initialPoint.HasValue) return; // No point determined from block then cancel
-
-            var points = new List<Point3d>{ initialPoint.Value };
-
+            var points = new List<Point3d>{ initial.Point3d };
             var nextLevel = true;
 
             var options = new PromptEntityOptions(Resources.Command_Prompt_SelectNextBlock);
@@ -57,24 +52,21 @@ namespace Jpp.Ironstone.Housing.Commands
                 result = ed.GetEntity(options);
 
                 if (result.Status == PromptStatus.OK)
-                { 
-                    var block = LevelBlockHelper.GetBlockReference(result.ObjectId, trans);
-                    if (block == null)
+                {
+                    var details = new LevelBlockDetails(LevelBlockHelper.GetBlockReference(result.ObjectId, trans));
+                    if (!details.IsValid)
                     {
                         HousingExtensionApplication.Current.Logger.Entry(Resources.Message_Invalid_Level_Block_Selected, Severity.Warning);
                         return;
                     }
 
-                    var point = GetPoint3dFromBlock(block);
-                    if (!point.HasValue) return; // No point determined from block then cancel
-
-                    if (points.Any(p => p.Y.Equals(point.Value.Y) && p.X.Equals(point.Value.X) && p.Z.Equals(point.Value.Z)))
+                    if (points.Any(p => p.Y.Equals(details.Point3d.Y) && p.X.Equals(details.Point3d.X) && p.Z.Equals(details.Point3d.Z)))
                     {
                         HousingExtensionApplication.Current.Logger.Entry(Resources.Message_Block_Already_Selected, Severity.Information);
                     }
                     else
                     {
-                        points.Add(point.Value);
+                        points.Add(details.Point3d);
                     }
 
                     nextLevel = true;
@@ -110,16 +102,6 @@ namespace Jpp.Ironstone.Housing.Commands
             }
 
             poly3d.Closed = shouldClose;
-        }
-
-        private static Point3d? GetPoint3dFromBlock(BlockReference block)
-        {
-            var level = LevelBlockHelper.GetLevelFromBlock(block);
-            if (level.HasValue) return new Point3d(block.Position.X, block.Position.Y, level.Value);
-
-
-            HousingExtensionApplication.Current.Logger.LogException(new ArgumentNullException(nameof(level)));
-            return null;
         }
     }
 }
