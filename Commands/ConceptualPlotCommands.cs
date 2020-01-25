@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Autodesk.AutoCAD.ApplicationServices;
+﻿using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Runtime;
+using Jpp.Ironstone.Core;
 using Jpp.Ironstone.Core.Autocad.DrawingObjects.Primitives;
 using Jpp.Ironstone.Core.ServiceInterfaces;
 using Jpp.Ironstone.Housing.ObjectModel;
@@ -16,6 +12,7 @@ namespace Jpp.Ironstone.Housing.Commands
 {
     public static class ConceptualPlotCommands
     {
+        [IronstoneCommand]
         [CommandMethod("C_ConceptualPlot_Create")]
         public static void CreatePlot()
         {

@@ -36,57 +36,28 @@
     <LangVersion>8</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AcCoreMgd, Version=23.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\AutoCAD.NET.Core.23.0.0\lib\net47\AcCoreMgd.dll</HintPath>
+    <Reference Include="accoremgd, Version=23.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Jpp.Ironstone.BaseApi.2019.0.1.0\lib\net47\accoremgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="AcCui, Version=23.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\AutoCAD.NET.23.0.0\lib\net47\AcCui.dll</HintPath>
+    <Reference Include="Acdbmgd, Version=23.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Jpp.Ironstone.BaseApi.2019.0.1.0\lib\net47\Acdbmgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="AcDbMgd, Version=23.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\AutoCAD.NET.Model.23.0.0\lib\net47\AcDbMgd.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="acdbmgdbrep, Version=23.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\AutoCAD.NET.Model.23.0.0\lib\net47\acdbmgdbrep.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="AcDx, Version=23.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\AutoCAD.NET.23.0.0\lib\net47\AcDx.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="AcMgd, Version=23.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\AutoCAD.NET.23.0.0\lib\net47\AcMgd.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="AcMr, Version=23.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\AutoCAD.NET.23.0.0\lib\net47\AcMr.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="AcSeamless, Version=23.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>packages\AutoCAD.NET.23.0.0\lib\net47\AcSeamless.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="AcTcMgd, Version=23.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\AutoCAD.NET.23.0.0\lib\net47\AcTcMgd.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="AcWindows, Version=23.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\AutoCAD.NET.23.0.0\lib\net47\AcWindows.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="AdUIMgd, Version=23.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\AutoCAD.NET.23.0.0\lib\net47\AdUIMgd.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="AdUiPalettes, Version=23.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\AutoCAD.NET.23.0.0\lib\net47\AdUiPalettes.dll</HintPath>
+    <Reference Include="acmgd, Version=23.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Jpp.Ironstone.UiApi.2019.0.0.1\lib\net47\acmgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="AdWindows, Version=2017.11.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\AutoCAD.NET.23.0.0\lib\net47\AdWindows.dll</HintPath>
+      <HintPath>packages\Jpp.Ironstone.UiApi.2019.0.0.1\lib\net47\AdWindows.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="AeccDbMgd, Version=13.0.613.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>packages\Jpp.Ironstone.C3dApi.2019.0.0.1\lib\net47\AeccDbMgd.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="AspectInjector.Broker, Version=2.2.5.0, Culture=neutral, PublicKeyToken=a29e12442a3d3609, processorArchitecture=MSIL">
+      <HintPath>packages\AspectInjector.2.2.5\lib\netstandard2.0\AspectInjector.Broker.dll</HintPath>
     </Reference>
     <Reference Include="AutoUpdate, Version=1.0.15.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\AutoUpdate.1.0.15\lib\net47\AutoUpdate.dll</HintPath>
@@ -172,9 +143,10 @@
     <None Include="Resources\gradient-large.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="IronstoneConfig.xml" />
-    <Content Include="IronstoneConfigBeta.xml" />
-    <Content Include="IronstoneConfigRelease.xml" />
+    <Analyzer Include="packages\AspectInjector.2.2.5\analyzers\dotnet\cs\AspectInjector.Analyzer.dll" />
+    <Analyzer Include="packages\AspectInjector.2.2.5\analyzers\dotnet\cs\AspectInjector.Broker.dll" />
+    <Analyzer Include="packages\AspectInjector.2.2.5\analyzers\dotnet\cs\AspectInjector.Rules.dll" />
+    <Analyzer Include="packages\AspectInjector.2.2.5\analyzers\dotnet\cs\FluentIL.Common.dll" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="AutocadStyleResourceDictionary.xaml">
@@ -187,9 +159,21 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ironstone-core\Ironstone Core UI\Ironstone Core UI.csproj" />
-    <ProjectReference Include="..\ironstone-core\Ironstone Core\Ironstone Core.csproj" />
-    <ProjectReference Include="..\ironstone-object-model\Housing\HousingObjectModel.csproj" />
+    <ProjectReference Include="..\ironstone-core\Ironstone Core UI\Ironstone Core UI.csproj">
+      <Project>{AC79C0AE-544A-4CB5-8FB7-665754BDEA9F}</Project>
+      <Name>Ironstone Core UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ironstone-core\Ironstone Core\Ironstone Core.csproj">
+      <Project>{A3BFA507-A2C4-4C33-943B-6083133EE63C}</Project>
+      <Name>Ironstone Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ironstone-object-model\Housing\HousingObjectModel.csproj">
+      <Project>{B45B4490-1CFB-412E-BCD0-9606290E4777}</Project>
+      <Name>HousingObjectModel</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\concept-plot-small.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\Jpp.Common.Tooling.Signing.0.3.0\build\Jpp.Common.Tooling.Signing.targets" Condition="Exists('packages\Jpp.Common.Tooling.Signing.0.3.0\build\Jpp.Common.Tooling.Signing.targets')" />
@@ -198,5 +182,7 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('packages\Jpp.Common.Tooling.Signing.0.3.0\build\Jpp.Common.Tooling.Signing.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Jpp.Common.Tooling.Signing.0.3.0\build\Jpp.Common.Tooling.Signing.targets'))" />
+    <Error Condition="!Exists('packages\AspectInjector.2.2.5\build\netstandard2.0\AspectInjector.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\AspectInjector.2.2.5\build\netstandard2.0\AspectInjector.targets'))" />
   </Target>
+  <Import Project="packages\AspectInjector.2.2.5\build\netstandard2.0\AspectInjector.targets" Condition="Exists('packages\AspectInjector.2.2.5\build\netstandard2.0\AspectInjector.targets')" />
 </Project>

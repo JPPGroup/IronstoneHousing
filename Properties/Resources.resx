@@ -167,6 +167,10 @@ Select start level block</value>
     <value>
 Select start point</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="concept_plot_small" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\concept-plot-small.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Exception_NoGradientBlock" xml:space="preserve">
     <value>No gradient block.</value>
   </data>
@@ -175,6 +179,9 @@ Select start point</value>
   </data>
   <data name="ExtensionApplication_UI_BtnBlockBetweenBlocks" xml:space="preserve">
     <value>Intermediate Between Blocks</value>
+  </data>
+  <data name="ExtensionApplication_UI_BtnConceptPlotCreate" xml:space="preserve">
+    <value>Create Concept Plot</value>
   </data>
   <data name="ExtensionApplication_UI_BtnGradientBetweenBlocks" xml:space="preserve">
     <value>Gradient Block</value>
@@ -191,10 +198,12 @@ Select start point</value>
   <data name="ExtensionApplication_UI_BtnLevelBlocks" xml:space="preserve">
     <value>Level Block</value>
   </data>
+  <data name="ExtensionApplication_UI_HousingContextTabTitle" xml:space="preserve">
+    <value>Housing Plot</value>
+  </data>
   <data name="ExtensionApplication_UI_PanelTitle" xml:space="preserve">
     <value>Housing</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="gradient_large" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\gradient-large.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

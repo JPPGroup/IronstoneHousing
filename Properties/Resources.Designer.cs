@@ -189,6 +189,16 @@ namespace Jpp.Ironstone.Housing.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap concept_plot_small {
+            get {
+                object obj = ResourceManager.GetObject("concept_plot_small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No gradient block..
         /// </summary>
         internal static string Exception_NoGradientBlock {
@@ -212,6 +222,15 @@ namespace Jpp.Ironstone.Housing.Properties {
         internal static string ExtensionApplication_UI_BtnBlockBetweenBlocks {
             get {
                 return ResourceManager.GetString("ExtensionApplication_UI_BtnBlockBetweenBlocks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Concept Plot.
+        /// </summary>
+        internal static string ExtensionApplication_UI_BtnConceptPlotCreate {
+            get {
+                return ResourceManager.GetString("ExtensionApplication_UI_BtnConceptPlotCreate", resourceCulture);
             }
         }
         
@@ -257,6 +276,15 @@ namespace Jpp.Ironstone.Housing.Properties {
         internal static string ExtensionApplication_UI_BtnLevelBlocks {
             get {
                 return ResourceManager.GetString("ExtensionApplication_UI_BtnLevelBlocks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Housing Plot.
+        /// </summary>
+        internal static string ExtensionApplication_UI_HousingContextTabTitle {
+            get {
+                return ResourceManager.GetString("ExtensionApplication_UI_HousingContextTabTitle", resourceCulture);
             }
         }
         
