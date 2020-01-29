@@ -23,16 +23,13 @@ namespace Jpp.Ironstone.Housing.Commands
             var db = doc.Database;
 
             using var trans = db.TransactionManager.StartTransaction();
-            
-            var startBlock = LevelBlockHelper.GetPromptedBlock(Resources.Command_Prompt_SelectStartLevelBlock, ed, trans);
-            if (startBlock == null) return; //Assume user cancelled
 
-            var endBlock = LevelBlockHelper.GetPromptedBlock(Resources.Command_Prompt_SelectEndLevelBlock, ed, trans);
-            if (endBlock == null) return; //Assume user cancelled
-
-            GradientBlockHelper.GenerateBlock(db, startBlock, endBlock);
-
-            trans.Commit();
+            var details = CommandHelper.GetStartEndDetails(ed, trans);
+            if (details.IsValid)
+            {
+                GradientBlockHelper.GenerateBlock(db, details.Start, details.End);
+                trans.Commit();
+            }
         }
     }
 }

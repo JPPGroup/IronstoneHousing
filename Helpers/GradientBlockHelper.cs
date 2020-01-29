@@ -16,14 +16,11 @@ namespace Jpp.Ironstone.Housing.Helpers
         private const string FLIP_ATTRIBUTE_NAME = "Flip state1";
         private const double ARROW_FULL_LENGTH = 2; // Hack to move position based on a known length
 
-        public static void GenerateBlock(Database database, BlockReference x, BlockReference y)
+        public static void GenerateBlock(Database database, LevelBlockDetails x, LevelBlockDetails y)
         {
-            var xLevel = LevelBlockHelper.GetLevelFromBlock(x);
-            var yLevel = LevelBlockHelper.GetLevelFromBlock(y);
+            if (!x.IsValid || !y.IsValid) return;
 
-            if (!xLevel.HasValue || !yLevel.HasValue) return;
-
-            if (xLevel.Value.Equals(yLevel.Value))
+            if (x.Level.Equals(y.Level))
             {
                 HousingExtensionApplication.Current.Logger.Entry(Resources.Message_Levels_Are_Equal);
                 return;
@@ -33,22 +30,21 @@ namespace Jpp.Ironstone.Housing.Helpers
             Point2d endPoint;
             double startLevel;
             double endLevel;
-            var plane = new Plane(Point3d.Origin, Vector3d.ZAxis);
 
             //Always point downhill
-            if (xLevel.Value > yLevel.Value)
+            if (x.Level > y.Level)
             {
-                startPoint = x.Position.Convert2d(plane);
-                startLevel = xLevel.Value;
-                endPoint = y.Position.Convert2d(plane);
-                endLevel = yLevel.Value;
+                startPoint = x.Point2d;
+                startLevel = x.Level;
+                endPoint = y.Point2d;
+                endLevel = y.Level;
             }
             else
             {
-                startPoint = y.Position.Convert2d(plane);
-                startLevel = yLevel.Value;
-                endPoint = x.Position.Convert2d(plane);
-                endLevel = xLevel.Value;
+                startPoint = y.Point2d;
+                startLevel = y.Level;
+                endPoint = x.Point2d;
+                endLevel = x.Level;
             }
 
             var vector = endPoint.GetAsVector() - startPoint.GetAsVector();
@@ -63,7 +59,7 @@ namespace Jpp.Ironstone.Housing.Helpers
 
             var rotation = vector.Angle;
 
-            NewGradientBlockAtPoint(database, new Point3d(plane, midPoint), gradient, rotation);
+            NewGradientBlockAtPoint(database, new Point3d(midPoint.X, midPoint.Y, 0), gradient, rotation);
 
             HousingExtensionApplication.Current.Logger.Entry(string.Format(Resources.Command_Output_GradientLineLength, Math.Round(vector.Length, 3)));
         }
