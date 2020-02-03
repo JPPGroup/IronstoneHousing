@@ -235,7 +235,7 @@ namespace Jpp.Ironstone.Housing.Helpers
 
         private bool GetIsValid()
         {
-            return _point2d.HasValue && _level.HasValue && _rotation.HasValue && _rotate.HasValue;
+            return _point2d.HasValue && _level.HasValue && _rotation.HasValue;
         }
 
         private Point2d GetPoint2d()
