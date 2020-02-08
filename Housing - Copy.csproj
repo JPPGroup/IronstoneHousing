@@ -143,10 +143,20 @@
     <None Include="Resources\gradient-large.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ironstone-core\Ironstone Core UI\Ironstone Core UI.csproj"/>
+    <ProjectReference Include="..\ironstone-core\Ironstone Core\Ironstone Core.csproj" />
+    <ProjectReference Include="..\ironstone-object-model\Housing\HousingObjectModel.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <Analyzer Include="packages\AspectInjector.2.2.5\analyzers\dotnet\cs\AspectInjector.Analyzer.dll" />
     <Analyzer Include="packages\AspectInjector.2.2.5\analyzers\dotnet\cs\AspectInjector.Broker.dll" />
     <Analyzer Include="packages\AspectInjector.2.2.5\analyzers\dotnet\cs\AspectInjector.Rules.dll" />
     <Analyzer Include="packages\AspectInjector.2.2.5\analyzers\dotnet\cs\FluentIL.Common.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="IronstoneConfig.xml" />
+    <Content Include="IronstoneConfigBeta.xml" />
+    <Content Include="IronstoneConfigRelease.xml" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="AutocadStyleResourceDictionary.xaml">
@@ -157,23 +167,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\concept-plot-small.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ironstone-core\Ironstone Core UI\Ironstone Core UI.csproj">
-      <Project>{AC79C0AE-544A-4CB5-8FB7-665754BDEA9F}</Project>
-      <Name>Ironstone Core UI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ironstone-core\Ironstone Core\Ironstone Core.csproj">
-      <Project>{A3BFA507-A2C4-4C33-943B-6083133EE63C}</Project>
-      <Name>Ironstone Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ironstone-object-model\Housing\HousingObjectModel.csproj">
-      <Project>{B45B4490-1CFB-412E-BCD0-9606290E4777}</Project>
-      <Name>HousingObjectModel</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\Jpp.Common.Tooling.Signing.0.3.0\build\Jpp.Common.Tooling.Signing.targets" Condition="Exists('packages\Jpp.Common.Tooling.Signing.0.3.0\build\Jpp.Common.Tooling.Signing.targets')" />

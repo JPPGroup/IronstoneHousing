@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ironstone Core UI", "..\iro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HousingObjectModel", "..\ironstone-object-model\Housing\HousingObjectModel.csproj", "{B45B4490-1CFB-412E-BCD0-9606290E4777}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StructuresObjectModel", "..\ironstone-object-model\Structures\StructuresObjectModel.csproj", "{ADA84B10-90AB-4AD2-9F7C-FDFD362AC7CA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -33,6 +35,10 @@ Global
 		{B45B4490-1CFB-412E-BCD0-9606290E4777}.Debug|x64.Build.0 = Debug|x64
 		{B45B4490-1CFB-412E-BCD0-9606290E4777}.Release|x64.ActiveCfg = Release|x64
 		{B45B4490-1CFB-412E-BCD0-9606290E4777}.Release|x64.Build.0 = Release|x64
+		{ADA84B10-90AB-4AD2-9F7C-FDFD362AC7CA}.Debug|x64.ActiveCfg = Debug|x64
+		{ADA84B10-90AB-4AD2-9F7C-FDFD362AC7CA}.Debug|x64.Build.0 = Debug|x64
+		{ADA84B10-90AB-4AD2-9F7C-FDFD362AC7CA}.Release|x64.ActiveCfg = Release|x64
+		{ADA84B10-90AB-4AD2-9F7C-FDFD362AC7CA}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
