@@ -172,6 +172,10 @@
       <Project>{B45B4490-1CFB-412E-BCD0-9606290E4777}</Project>
       <Name>HousingObjectModel</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ironstone-structures\Structures.csproj">
+      <Project>{f8266a40-e8c4-4887-95e6-d4d06e9ca440}</Project>
+      <Name>Structures</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="packages\AspectInjector.2.3.1\analyzers\dotnet\cs\AspectInjector.Analyzer.dll" />

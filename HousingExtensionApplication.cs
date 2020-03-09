@@ -8,10 +8,8 @@ using Jpp.Ironstone.Housing.Commands;
 using Jpp.Ironstone.Housing.Properties;
 using System.Drawing;
 using Autodesk.AutoCAD.ApplicationServices.Core;
-using Autodesk.AutoCAD.EditorInput;
 using Jpp.Ironstone.Housing.ObjectModel;
 using Jpp.Ironstone.Housing.ObjectModel.Concept;
-using NLog;
 using Unity;
 using Constants = Jpp.Ironstone.Core.Constants;
 using ILogger = Jpp.Ironstone.Core.ServiceInterfaces.ILogger;
@@ -74,15 +72,25 @@ namespace Jpp.Ironstone.Housing
             var tab = ribbon.FindTab(Constants.IRONSTONE_CONCEPT_TAB_ID);
             tab.Panels.Add(panel);
 
-            RibbonTab housingConceptTab = new RibbonTab();
-            housingConceptTab.Title = Resources.ExtensionApplication_UI_HousingContextTabTitle;
+            SharedUIHelper.CreateSharedElements();
+            /*RibbonRowPanel cpColumn = new RibbonRowPanel { IsTopJustified = true };
+            cpColumn.Items.Add(btnConceptualPlotEstimateFounds);
+            RibbonPanelSource cpSource = new RibbonPanelSource { Title = Resources.ExtensionApplication_UI_PanelTitle };
+            cpSource.Items.Add(cpColumn);
 
-            CoreUIExtensionApplication.Current.RegisterConceptTab(housingConceptTab, () =>
+            RibbonPanel cpPanel = new RibbonPanel { Source = cpSource };
+            SharedUIHelper.HousingConceptTab.Panels.Add(cpPanel);*/
+
+            if (CoreExtensionApplication.Civil3D)
             {
-                string activeName = Application.DocumentManager.MdiActiveDocument.Name;
-                ConceptualPlotManager manager = DataService.Current.GetStore<HousingDocumentStore>(activeName).GetManager<ConceptualPlotManager>();
-                return ContextualTabHelper.SelectionRestrictedToCollection(manager.ManagedObjects);
-            });
+                CoreUIExtensionApplication.Current.RegisterConceptTab(SharedUIHelper.HousingConceptTab, () =>
+                {
+                    string activeName = Application.DocumentManager.MdiActiveDocument.Name;
+                    ConceptualPlotManager manager = DataService.Current.GetStore<HousingDocumentStore>(activeName)
+                        .GetManager<ConceptualPlotManager>();
+                    return ContextualTabHelper.SelectionRestrictedToCollection(manager.ManagedObjects);
+                });
+            }
         }
 
         public void Initialize()

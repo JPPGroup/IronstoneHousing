@@ -1,4 +1,5 @@
-﻿using Autodesk.AutoCAD.ApplicationServices;
+﻿using System.Linq;
+using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Runtime;
@@ -7,30 +8,37 @@ using Jpp.Ironstone.Core.Autocad.DrawingObjects.Primitives;
 using Jpp.Ironstone.Core.ServiceInterfaces;
 using Jpp.Ironstone.Housing.ObjectModel;
 using Jpp.Ironstone.Housing.ObjectModel.Concept;
+using Unity;
 
 namespace Jpp.Ironstone.Housing.Commands
 {
     public static class ConceptualPlotCommands
     {
         [IronstoneCommand]
-        [CommandMethod("C_ConceptualPlot_Create")]
+        [Civil3D]
+        [CommandMethod("C_ConceptualPlot_Create", CommandFlags.UsePickSet)]
         public static void CreatePlot()
         {
-            HousingExtensionApplication.Current.Logger.LogCommand(typeof(ConceptualPlotCommands), nameof(CreatePlot));
-
             // Get the current document and database
             Document document = Application.DocumentManager.MdiActiveDocument;
             Database database = document.Database;
 
+            ILogger logger = CoreExtensionApplication._current.Container.Resolve<ILogger>();
+
             using (Transaction trans = document.TransactionManager.StartTransaction())
             {
-                // Request for objects to be selected in the drawing area
-                PromptSelectionResult selectionResult = document.Editor.GetSelection();
+                PromptSelectionResult selectionResult = document.Editor.SelectImplied();
+                if (selectionResult.Status != PromptStatus.OK && selectionResult.Value.Count == 0)
+                {
+                    // Request for objects to be selected in the drawing area
+                    selectionResult = document.Editor.GetSelection();
+                }
 
                 // If the prompt status is OK, objects were selected
                 if (selectionResult.Status == PromptStatus.OK)
                 {
-                    ConceptualPlotManager manager = DataService.Current.GetStore<HousingDocumentStore>(document.Name).GetManager<ConceptualPlotManager>();
+                    ConceptualPlotManager manager = DataService.Current.GetStore<HousingDocumentStore>(document.Name)
+                        .GetManager<ConceptualPlotManager>();
 
                     SelectionSet selectionSet = selectionResult.Value;
 
@@ -79,10 +87,12 @@ namespace Jpp.Ironstone.Housing.Commands
                         }
                     }
 
-                    if(skippedObjects > 0)
-                        document.Editor.WriteMessage($"\n{skippedObjects} objects were not polylines and were skipped.");
+                    if (skippedObjects > 0)
+                        logger.Entry(
+                            $"\n{skippedObjects} objects were not polylines and were skipped.", Severity.Information);
                     if (unclosedPolylines > 0)
-                        document.Editor.WriteMessage($"\n{unclosedPolylines} polylines were not closed and were skipped.");
+                        logger.Entry(
+                            $"\n{unclosedPolylines} polylines were not closed and were skipped.", Severity.Information);
 
                     // Save the new object to the database
                     trans.Commit();
