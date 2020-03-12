@@ -101,6 +101,15 @@ namespace Jpp.Ironstone.Housing.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a finish floor level.
+        /// </summary>
+        internal static string Command_Prompt_FinishFloorLevel {
+            get {
+                return ResourceManager.GetString("Command_Prompt_FinishFloorLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 
         ///Include gradient.
         /// </summary>
@@ -121,6 +130,16 @@ namespace Jpp.Ironstone.Housing.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 
+        ///Select plot line.
+        /// </summary>
+        internal static string Command_Prompt_PlotLine {
+            get {
+                return ResourceManager.GetString("Command_Prompt_PlotLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Only 3d polylines allowed..
         /// </summary>
         internal static string Command_Prompt_Reject3dPolyline {
@@ -135,6 +154,15 @@ namespace Jpp.Ironstone.Housing.Properties {
         internal static string Command_Prompt_RejectBlockReference {
             get {
                 return ResourceManager.GetString("Command_Prompt_RejectBlockReference", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only polylines allowed..
+        /// </summary>
+        internal static string Command_Prompt_RejectPlotLine {
+            get {
+                return ResourceManager.GetString("Command_Prompt_RejectPlotLine", resourceCulture);
             }
         }
         
@@ -205,6 +233,16 @@ namespace Jpp.Ironstone.Housing.Properties {
         internal static string Command_Prompt_SelectNextBlock {
             get {
                 return ResourceManager.GetString("Command_Prompt_SelectNextBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///Select point.
+        /// </summary>
+        internal static string Command_Prompt_SelectPoint {
+            get {
+                return ResourceManager.GetString("Command_Prompt_SelectPoint", resourceCulture);
             }
         }
         
@@ -307,6 +345,15 @@ namespace Jpp.Ironstone.Housing.Properties {
         internal static string ExtensionApplication_UI_BtnLevelBlocks {
             get {
                 return ResourceManager.GetString("ExtensionApplication_UI_BtnLevelBlocks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Premlim Plot.
+        /// </summary>
+        internal static string ExtensionApplication_UI_BtnPlotPrelim {
+            get {
+                return ResourceManager.GetString("ExtensionApplication_UI_BtnPlotPrelim", resourceCulture);
             }
         }
         
@@ -425,6 +472,16 @@ namespace Jpp.Ironstone.Housing.Properties {
         internal static string Message_No_Rotate_Set_On_Block {
             get {
                 return ResourceManager.GetString("Message_No_Rotate_Set_On_Block", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap plot_small {
+            get {
+                object obj = ResourceManager.GetObject("plot_small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

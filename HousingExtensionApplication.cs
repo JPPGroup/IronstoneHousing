@@ -25,6 +25,7 @@ namespace Jpp.Ironstone.Housing
             var cmdBlockBetweenBlocks = UIHelper.GetCommandGlobalName(typeof(LevelBlockCommands), nameof(LevelBlockCommands.CalculateLevelBetweenLevels));
             var cmdGradientBetweenBlocks = UIHelper.GetCommandGlobalName(typeof(GradientBlockCommands), nameof(GradientBlockCommands.CalculateGradientBetweenLevels));
             var cmdPolylineFromLevelBlocks = UIHelper.GetCommandGlobalName(typeof(PolylineCommands), nameof(PolylineCommands.GeneratePolyline3dFromLevels));
+            var cmdPlotPrelim = UIHelper.GetCommandGlobalName(typeof(PrelimPlotCommands), nameof(PrelimPlotCommands.PrelimPlotDetails));
 
             var btnBlockFromPointAtGradient = UIHelper.CreateButton(Resources.ExtensionApplication_UI_BtnLevelBlockFromPointAtGradient, Resources.level_block_small, RibbonItemSize.Standard, cmdBlockFromPointAtGradient);
             var btnBlockFromBlockAtGradient = UIHelper.CreateButton(Resources.ExtensionApplication_UI_BtnLevelBlockFromBlockAtGradient, Resources.level_block_small, RibbonItemSize.Standard, cmdBlockFromBlockAtGradient);
@@ -33,6 +34,8 @@ namespace Jpp.Ironstone.Housing
 
             var btnGradientBetweenBlocks = UIHelper.CreateButton(Resources.ExtensionApplication_UI_BtnGradientBetweenBlocks, Resources.gradient_large, RibbonItemSize.Standard, cmdGradientBetweenBlocks);
             var btnPolylineFromLevelBlocks = UIHelper.CreateButton(Resources.ExtensionApplication_UI_BtnPolylineFromLevelBlocks, Resources.line_from_levels_small, RibbonItemSize.Standard, cmdPolylineFromLevelBlocks);
+
+            var btnPlotPrelims = UIHelper.CreateButton(Resources.ExtensionApplication_UI_BtnPlotPrelim, Resources.plot_small, RibbonItemSize.Standard, cmdPlotPrelim);
 
             var btnSplitLevel = new RibbonSplitButton
             {
@@ -49,15 +52,19 @@ namespace Jpp.Ironstone.Housing
             btnSplitLevel.Items.Add(btnBlockBetweenBlocks);
 
             var source = new RibbonPanelSource { Title = Resources.ExtensionApplication_UI_PanelTitle };
-            var column = new RibbonRowPanel { IsTopJustified = true };
+            var column1 = new RibbonRowPanel { IsTopJustified = true };
+            var column2 = new RibbonRowPanel { IsTopJustified = true };
 
-            column.Items.Add(btnSplitLevel);
-            column.Items.Add(new RibbonRowBreak());
-            column.Items.Add(btnGradientBetweenBlocks);
-            column.Items.Add(new RibbonRowBreak());
-            column.Items.Add(btnPolylineFromLevelBlocks);
+            column1.Items.Add(btnSplitLevel);
+            column1.Items.Add(new RibbonRowBreak());
+            column1.Items.Add(btnGradientBetweenBlocks);
+            column1.Items.Add(new RibbonRowBreak());
+            column1.Items.Add(btnPolylineFromLevelBlocks);
+            
+            column2.Items.Add(btnPlotPrelims);
 
-            source.Items.Add(column);
+            source.Items.Add(column1);
+            source.Items.Add(column2);
 
             var panel = new RibbonPanel { Source = source };
             var ribbon = ComponentManager.Ribbon;
