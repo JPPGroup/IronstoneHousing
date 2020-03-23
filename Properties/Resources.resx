@@ -213,6 +213,9 @@ Select start point</value>
   <data name="ExtensionApplication_UI_BtnGradientBetweenBlocks" xml:space="preserve">
     <value>Gradient Block</value>
   </data>
+  <data name="ExtensionApplication_UI_BtnLevelBlockAtPoint" xml:space="preserve">
+    <value>At Point</value>
+  </data>
   <data name="ExtensionApplication_UI_BtnLevelBlockFromBlockAtGradient" xml:space="preserve">
     <value>From Block At Gradient</value>
   </data>

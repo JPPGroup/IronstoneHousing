@@ -25,6 +25,33 @@ namespace Jpp.Ironstone.Housing.Commands
         private static string _includeGradient = GradientKeywords[0]; //cache of previous gradient selection
 
         /// <summary>
+        /// Custom command to calculate a level at a given point
+        /// </summary>
+        [CommandMethod("C_LevelBlock_AtPoint")]
+        public static void CalculateLevelAtPoint()
+        {
+            HousingExtensionApplication.Current.Logger.LogCommand(typeof(LevelBlockCommands), nameof(CalculateLevelAtPoint));
+
+            var doc = Application.DocumentManager.MdiActiveDocument;
+            var ed = doc.Editor;
+            var db = doc.Database;
+
+            using var trans = db.TransactionManager.StartTransaction();
+
+            if (!LevelBlockHelper.HasLevelBlock(db)) throw new ArgumentException(Resources.Exception_NoLevelBlock);
+
+            var point = ed.PromptForPosition(Resources.Command_Prompt_SelectPoint);
+            if (!point.HasValue) return; //Assume user cancelled
+
+            var args = new LevelBlockArgs(point.Value, point.Value.Z);
+
+            LevelBlockHelper.NewLevelBlockAtPoint(db, args);
+
+            trans.Commit();
+        }
+
+
+        /// <summary>
         /// Custom command to calculate a level at given point between two existing levels
         /// </summary>
         [CommandMethod("C_LevelBlock_BetweenLevels")]

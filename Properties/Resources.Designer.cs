@@ -313,6 +313,15 @@ namespace Jpp.Ironstone.Housing.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to At Point.
+        /// </summary>
+        internal static string ExtensionApplication_UI_BtnLevelBlockAtPoint {
+            get {
+                return ResourceManager.GetString("ExtensionApplication_UI_BtnLevelBlockAtPoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to From Block At Gradient.
         /// </summary>
         internal static string ExtensionApplication_UI_BtnLevelBlockFromBlockAtGradient {
